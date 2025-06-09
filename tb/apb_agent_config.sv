@@ -17,7 +17,7 @@
       endfunction
       
       // Setter for the APB virtual interface:
-      virtual function void set_vif(apb_vif value);
+      virtual function void set_vif(apb_vif value); // To make sure the setting of vif is done just once.
         if(vif == null) begin
           vif =  value;
         end
@@ -32,10 +32,10 @@
         super.start_of_simulation_phase(phase);
         
         if(get_vif == null) begin
-          `uvm_fatal("ALGORITHM ISSUE", "The APB virtual interface is not configured at [start of simulation] phase.")
+          `uvm_fatal("ALGORITHM ISSUE", "The APB virtual interface is not configured at \"start of simulation\" phase.")
         end
         else begin
-          `uvm_info("APB CONFIG", "The APB virtual interface is configured at [start of simulation] phase.", UVM_LOW)
+          `uvm_info("APB CONFIG", "The APB virtual interface is configured at \"start of simulation\" phase.", UVM_LOW)
         end
         
       endfunction

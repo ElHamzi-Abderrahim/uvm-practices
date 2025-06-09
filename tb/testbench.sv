@@ -8,7 +8,6 @@
 */
 
 `include "design.sv"
-// `include "my_includes.svh"
 `include "algn_test_pkg.sv"
 
 `timescale 1ns/10ps
@@ -19,10 +18,10 @@ module testbench();
   	import algn_test_pkg::* ;
   
   	/* Local Parameters: */
-  	localparam 	TB_ALGN_DATA_WIDTH 	= 32,
-  				TB_FIFO_DEPTH      	= 8 ,
-  				TB_APB_ADDR_WIDTH  	= 16,
-  				TB_APB_DATA_WIDTH   = 32,
+  	localparam 	TB_ALGN_DATA_WIDTH 		= 32,
+  				TB_FIFO_DEPTH      		= 8 ,
+  				TB_APB_ADDR_WIDTH  		= 16,
+  				TB_APB_DATA_WIDTH   	= 32,
    				TB_ALGN_OFFSET_WIDTH 	= TB_ALGN_DATA_WIDTH <= 8 ? 1 : $clog2(TB_ALGN_DATA_WIDTH/8),
   				TB_ALGN_SIZE_WIDTH   	= $clog2(TB_ALGN_DATA_WIDTH/8)+1;
   
@@ -53,7 +52,7 @@ module testbench();
   
   
   	/* Instance of APB interface: */
-  	apb_if apb_if_inst (.pclk(tb_clk));	
+  	apb_if apb_if_inst (.pclk(tb_clk));	 // It's a system-verilog static element, so we need to instantiate it tb not inside the agent.
   
   	
     /* DUT (Data Aligner) Instanciation: */
@@ -106,13 +105,27 @@ module testbench();
 
   
   	initial begin
-      $dumpfile("dump.vcd");
-      $dumpvars;
-      
-      uvm_config_db#(virtual interface apb_if)::set(null, "uvm_test_top.env.apb_agent_inst", "vif", apb_if_inst);
-      
-      run_test("");	// Test name will be passed using simulator arguments passing.
-//       run_phase();
+		$dumpfile("dump.vcd");
+		$dumpvars;
+		/* uvm_config_db#(T)::set(uvm_component cntxt, string inst_name, string field_name, T value)
+		 	uvm_config_db: is sys-verilog calss.
+			T	 		: is the type of data to be putted in the DataBase.
+			Descrip: Create a new or update an existing configuration setting for field_name in inst_name from cntxt. The setting is made at cntxt. 
+					If cntxt is null then inst_name provides the complete scope information of the setting. 
+					field_name is the target field. Both inst_name and field_name may be glob style or regular expression style expressions.
+							Examples: uvm_config_db#(int)::set(this, "env.apb_agent", "bus_width", 64) called in uvm_test.
+									  (Key,value) are ("bus_width", 64) which are accessible by apb_agent instanciated inside env relative to uvm_test (this).
+							Note	: - testbench is not a uvm_component => cntxt = null => full scope information should be provided by inst_name.
+									  - inst_name can be env.* if we want all component under "env" to have access to ("bus_width", 64)
+									  - If for the same key is putted in the db in multiple contexts but with different values (e.g set(this, "env.apb_agent", "bus_width", 64) and set(null, "base_test.env.apb_agent", "bus_width", 32) )
+										+ Case-1: If get is called in Build Phase -> the returned value will be the one putted in db by the component that has the higher context (e.g testbench -> value=32).
+										+ Case-2: If get is called in Run   Phase -> the returned value will be the putted in the db by the last putted one in db (e.g base_test -> 64).
+										[Ref. UVM-LRM/page-199].
+		*/				
+		uvm_config_db#(virtual interface apb_if)::set(null, "uvm_test_top.env.apb_agent_inst", "vif", apb_if_inst); // Store in the data base a pointer to the interface (virtual interface).
+		
+		run_test("");	// Test name will be passed using simulator arguments passing.
+
     end
   
 

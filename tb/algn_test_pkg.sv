@@ -7,6 +7,7 @@
     package algn_test_pkg;
         import uvm_pkg::* ;
         import algn_pkg::*;
+        import apb_pkg::* ;
 
 		`include "algn_test_base.sv"
         `include "algn_test_reg_access.sv"

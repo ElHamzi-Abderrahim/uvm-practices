@@ -9,8 +9,8 @@ info:
 
 
 # UVM Related variables:
-UVM_HOME	= /home/osboxes/uvm-1.2
-UVM_SRC		= /home/osboxes/uvm-1.2/src
+UVM_HOME	= $(HOME)/uvm-1.2
+UVM_SRC		= $(HOME)/uvm-1.2/src
 UVM_PKG		= $(UVM_SRC)/uvm_pkg.sv
 DPI_SRC 	= $(UVM_HOME)/src/dpi/uvm_dpi.cc
 
