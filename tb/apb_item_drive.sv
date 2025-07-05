@@ -16,32 +16,29 @@ class apb_item_drive extends apb_item_base;
 
     int unsigned post_drive_delay ;
 
-    // Randomizing the fields:
-
-
-
-    constraint pre_drive_delay_default {
-        soft pre_drive_delay <= 5 ;
-    }
+    // FIXME: Randomizing the fields (FEATURE NOT SUPPORTED BY THE FREE-VERSION OF MODELSIM):
+    // constraint pre_drive_delay_default {
+    //     soft pre_drive_delay <= 5 ;
+    // }
     
-    constraint post_drive_delay_default {
-        soft post_drive_delay <= 5 ;
-    }
+    // constraint post_drive_delay_default {
+    //     soft post_drive_delay <= 5 ;
+    // }
 
     function new(string name="apb_item_drive");
         super.new(name);
-    endfunction
+    endfunction : new
   
     // Alternative solution for randomizing object fields, due to the need of license for 
     // randomization features in the free version of modelsim.
-    virtual function void randomize_manually();
-        this.dir                 = apb_dir'($urandom_range(0, 1)) ; 
+    virtual function void randomize_user();
+        this.dir                 = apb_dir'($urandom_range(0, 1)) ; // apb_addr'(value): to caste the width of the value to width of apb_dir.
         this.address             = apb_addr'($urandom()) ; 
         this.data                = apb_data'($urandom()) ; 
         this.pre_drive_delay     = $urandom_range(0, 5) ; 
         this.post_drive_delay    = $urandom_range(0, 5) ; 
         // $display("dir: %0x, address: %0x, data: %0x, pre_dr_delay: %0x, post_dr_delay: %0x", this.dir, this.address, this.data, this.pre_drive_delay, this.post_drive_delay);
-    endfunction
+    endfunction : randomize_user
     
     
     virtual function string convert2string() ;
@@ -56,7 +53,7 @@ class apb_item_drive extends apb_item_base;
 
         // $display("inside string result: %s", result) ;
         return result ;
-    endfunction
+    endfunction : convert2string
 
 endclass
 

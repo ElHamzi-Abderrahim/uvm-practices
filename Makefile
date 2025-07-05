@@ -39,7 +39,7 @@ endif
 
 all: clean compile simulate
 
-compile: 
+compile: clean
 	@echo "Compiling the design and testbench..."
 	export QUESTA=1
 	vlib $(WORK_DIR)
@@ -50,7 +50,7 @@ compile:
 			+incdir+$(RTL_DIR) \
 			+incdir+$(TB_DIR)
 
-simulate: 
+simulate: clean compile
 	@echo "Running Simulation..."
 	vsim 	testbench \
 			$(VSIM_MODE) \

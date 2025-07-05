@@ -9,8 +9,6 @@ class apb_item_base extends uvm_sequence_item;
         super.new(name);
     endfunction
   
-
-
-endclass
+endclass : apb_item_base
 
 `endif

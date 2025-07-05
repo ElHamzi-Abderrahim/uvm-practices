@@ -8,16 +8,16 @@ class algn_test_base extends uvm_test;
   
   function new (string name="algn_test_base", uvm_component parent = null);
     super.new(name, parent);
-  endfunction
+  endfunction : new
   
   virtual function void build_phase(uvm_phase phase);
     super.build_phase(phase);
     env = algn_env::type_id::create("env", this);
-  endfunction
+  endfunction : build_phase
   
   
   
-endclass
+endclass : algn_test_base
 
 `endif
 

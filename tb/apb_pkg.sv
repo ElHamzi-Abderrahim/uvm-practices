@@ -8,10 +8,18 @@
 		import uvm_pkg::* ;
 		`include "apb_types.sv"
 		`include "apb_agent_config.sv"
-		`include "apb_agent.sv"
+
 		`include "apb_item_base.sv"
 		`include "apb_item_drive.sv"
-	
+		
+		`include "apb_sequencer.sv"
+		`include "apb_driver.sv"
+		`include "apb_agent.sv"
+
+		`include "apb_sequence_base.sv"
+		`include "apb_sequence_simple.sv"
+		`include "apb_sequence_rw.sv"
+		`include "apb_sequence_random.sv"
 	endpackage 
 
 

@@ -1,9 +1,9 @@
-/*
+ /*
    Date    		: 1st of May, 2025
    Author  		: Abderrahim EL HAMZI.
    Project 		: UVM-course Personal Practice.  
    Description	: This Project is a part of UVM course practice (on Udemy), for which a DUT is already provided by the course instructor.
-   File    		: TestBench of DUT to be verified using UVM.
+   File    		: TestBench of  DUT to be verified using UVM.
    
 */
 
@@ -13,7 +13,7 @@
 `timescale 1ns/10ps
 
 module testbench();
-  
+      
   	import uvm_pkg::* ;
   	import algn_test_pkg::* ;
   
@@ -108,9 +108,9 @@ module testbench();
 		$dumpfile("dump.vcd");
 		$dumpvars;
 		/* uvm_config_db#(T)::set(uvm_component cntxt, string inst_name, string field_name, T value)
-		 	uvm_config_db: is sys-verilog calss.
+		 	uvm_config_db: is a UVM calss.
 			T	 		: is the type of data to be putted in the DataBase.
-			Descrip: Create a new or update an existing configuration setting for field_name in inst_name from cntxt. The setting is made at cntxt. 
+			Description : Create a new or update an existing configuration setting for field_name in inst_name from cntxt. The setting is made at cntxt. 
 					If cntxt is null then inst_name provides the complete scope information of the setting. 
 					field_name is the target field. Both inst_name and field_name may be glob style or regular expression style expressions.
 							Examples: uvm_config_db#(int)::set(this, "env.apb_agent", "bus_width", 64) called in uvm_test.
@@ -120,9 +120,9 @@ module testbench();
 									  - If for the same key is putted in the db in multiple contexts but with different values (e.g set(this, "env.apb_agent", "bus_width", 64) and set(null, "base_test.env.apb_agent", "bus_width", 32) )
 										+ Case-1: If get is called in Build Phase -> the returned value will be the one putted in db by the component that has the higher context (e.g testbench -> value=32).
 										+ Case-2: If get is called in Run   Phase -> the returned value will be the putted in the db by the last putted one in db (e.g base_test -> 64).
-										[Ref. UVM-LRM/page-199].
+										[Ref. UVM-CRM/page-199].
 		*/				
-		uvm_config_db#(virtual interface apb_if)::set(null, "uvm_test_top.env.apb_agent_inst", "vif", apb_if_inst); // Store in the data base a pointer to the interface (virtual interface).
+		uvm_config_db#(virtual interface apb_if)::set(null, "uvm_test_top.env.apb_agent_h", "vif", apb_if_inst); // Store in DB a pointer to the APB interface (virtual interface).
 		
 		run_test("");	// Test name will be passed using simulator arguments passing.
 
