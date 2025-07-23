@@ -5,13 +5,6 @@ class apb_item_drive extends apb_item_base;
   
     `uvm_object_utils(apb_item_drive)
 
-    // rand apb_dir dir ;
-    apb_dir dir ;
-
-    apb_addr address ;
-
-    apb_data data ;
-
     int unsigned pre_drive_delay ;
 
     int unsigned post_drive_delay ;

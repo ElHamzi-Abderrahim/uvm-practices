@@ -55,7 +55,19 @@ simulate: clean compile
 	vsim 	testbench \
 			$(VSIM_MODE) \
 			+UVM_TESTNAME=algn_test_reg_access \
-			-do "set gui_mode $(GUI); run -all;"
+			-do "set gui_mode $(GUI); \
+			add wave -position insertpoint  \
+				sim:/testbench/dut/clk \
+				sim:/testbench/dut/reset_n \
+				sim:/testbench/dut/psel \
+				sim:/testbench/dut/penable \
+				sim:/testbench/dut/paddr \
+				sim:/testbench/dut/pwrite \
+				sim:/testbench/dut/prdata \
+				sim:/testbench/dut/pwdata \
+				sim:/testbench/dut/pready \
+				sim:/testbench/dut/pslverr ; \
+			run -all;"
 
 clean: 
 	@echo "Cleaning work direcory..."
