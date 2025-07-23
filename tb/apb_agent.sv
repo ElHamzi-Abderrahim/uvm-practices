@@ -5,9 +5,9 @@ class apb_agent extends uvm_agent;
 	
 	`uvm_component_utils(apb_agent) 
 	
-	apb_agent_config agent_config ;   // Handle of the configuration class.
-	apb_sequencer apb_sequencer_h;    // Handle of the APB sequencer.
-	apb_driver apb_driver_h;          // Handle of the APB driver.
+	apb_agent_config 	agent_config ;		// Handle of the configuration class.
+	apb_sequencer 		apb_sequencer_h;	// Handle of the APB sequencer.
+	apb_driver 			apb_driver_h;		// Handle of the APB driver.
 
 	function new(string name = "", uvm_component parent);
 		super.new(name, parent);
@@ -43,9 +43,11 @@ class apb_agent extends uvm_agent;
 		end
 
 		// Connecting the Driver and Sequencer if the Agent is active:
-		if(agent_config.active_passive == UVM_ACTIVE) begin
+		if(agent_config.get_active_passive() == UVM_ACTIVE) begin
 			apb_driver_h.seq_item_port.connect(apb_sequencer_h.seq_item_export);
+			apb_driver_h.agent_config = agent_config ;
 		end
+
 
 	endfunction : connect_phase
 

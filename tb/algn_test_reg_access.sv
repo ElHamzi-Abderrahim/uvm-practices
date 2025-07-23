@@ -19,14 +19,16 @@ class algn_test_reg_access extends algn_test_base;
 			begin
 				apb_sequence_simple apb_seq_simple = apb_sequence_simple::type_id::create("apb_seq_simple") ;
 				apb_seq_simple.randomize_user() ;
-				apb_seq_simple.item_drive.address = 'h222 ;
+				apb_seq_simple.item_drive.address = 'h0 ;
+				apb_seq_simple.item_drive.dir     = APB_WRITE ;
+				apb_seq_simple.item_drive.data    = 'h11 ;
 				apb_seq_simple.start(env.apb_agent_h.apb_sequencer_h) ;
 			end
 
 			begin
 				apb_sequence_rw apb_seq_rw = apb_sequence_rw::type_id::create("apb_seq_rw") ;
 				apb_seq_rw.randomize_user();
-				apb_seq_rw.addr = 'h4 ;
+				apb_seq_rw.addr = 'hc ;
 				apb_seq_rw.start(env.apb_agent_h.apb_sequencer_h) ;
 			end
 
@@ -38,7 +40,7 @@ class algn_test_reg_access extends algn_test_base;
 			end
 		join
 
-		for(int i=0; i<10; i++)begin
+		for(int i=0; i<10; i++) begin
 			apb_item_drive item_drive = apb_item_drive::type_id::create("item_drive") ;
 			item_drive.randomize_user();
 			// `uvm_info("DEBUG", $sformatf("[%0d] item: %0s", i, item_drive.convert2string()), "UVM_LOW")

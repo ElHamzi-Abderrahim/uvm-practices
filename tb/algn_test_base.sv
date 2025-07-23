@@ -15,8 +15,6 @@ class algn_test_base extends uvm_test;
     env = algn_env::type_id::create("env", this);
   endfunction : build_phase
   
-  
-  
 endclass : algn_test_base
 
 `endif
