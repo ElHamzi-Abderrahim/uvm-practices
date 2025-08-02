@@ -11,9 +11,11 @@
 
 		`include "apb_item_base.sv"
 		`include "apb_item_drive.sv"
+		`include "apb_item_monitor.sv"
 		
 		`include "apb_sequencer.sv"
 		`include "apb_driver.sv"
+		`include "apb_monitor.sv"
 		`include "apb_agent.sv"
 
 		`include "apb_sequence_base.sv"

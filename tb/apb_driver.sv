@@ -4,8 +4,10 @@
 class apb_driver extends uvm_driver #(.REQ(apb_item_drive));
 
     `uvm_component_utils(apb_driver)
-    
+
+    // Pointer to agent configuration
     apb_agent_config    agent_config ;
+    
     apb_item_drive      apb_d_item ;
 
 
@@ -21,7 +23,7 @@ class apb_driver extends uvm_driver #(.REQ(apb_item_drive));
         drive_transactions();
     endtask : run_phase
 
-    protected task drive_transactions();
+    protected virtual task drive_transactions();
         apb_vif vif = agent_config.get_vif() ;
 
         // Signals initialization:
@@ -39,7 +41,7 @@ class apb_driver extends uvm_driver #(.REQ(apb_item_drive));
     endtask : drive_transactions
 
 
-    protected task drive_transaction(input apb_item_drive item);
+    protected virtual task drive_transaction(input apb_item_drive item);
         apb_vif vif = agent_config.get_vif() ;
         $display("[DEBUG] %0s ", $sformatf("Driving \"%0s\" item: %0s", item.get_full_name(),item.convert2string()));
 

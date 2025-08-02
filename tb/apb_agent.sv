@@ -3,11 +3,16 @@
 	
 class apb_agent extends uvm_agent;
 	
-	`uvm_component_utils(apb_agent) 
-	
-	apb_agent_config 	agent_config ;		// Handle of the configuration class.
-	apb_sequencer 		apb_sequencer_h;	// Handle of the APB sequencer.
-	apb_driver 			apb_driver_h;		// Handle of the APB driver.
+	`uvm_component_utils(apb_agent)
+
+	// configuration class Handler.
+	apb_agent_config 	agent_config ;	
+	// APB sequencer Handler.	
+	apb_sequencer 		apb_sequencer_h;
+	// APB driver Handler.
+	apb_driver 			apb_driver_h;		
+	// APB monitor Handler.
+	apb_monitor			apb_monitor_h;		
 
 	function new(string name = "", uvm_component parent);
 		super.new(name, parent);
@@ -20,6 +25,7 @@ class apb_agent extends uvm_agent;
 		if(agent_config.active_passive == UVM_ACTIVE) begin
 			apb_sequencer_h = apb_sequencer::type_id::create("apb_sequencer_h", this);
 			apb_driver_h    = apb_driver::type_id::create("apb_driver_h", this);
+			apb_monitor_h   = apb_monitor::type_id::create("apb_monitor_h", this);
 		end
 
 	endfunction : build_phase
@@ -46,6 +52,7 @@ class apb_agent extends uvm_agent;
 		if(agent_config.get_active_passive() == UVM_ACTIVE) begin
 			apb_driver_h.seq_item_port.connect(apb_sequencer_h.seq_item_export);
 			apb_driver_h.agent_config = agent_config ;
+			apb_monitor_h.agent_config = agent_config ;
 		end
 
 

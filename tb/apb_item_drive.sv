@@ -35,16 +35,11 @@ class apb_item_drive extends apb_item_base;
     
     
     virtual function string convert2string() ;
-        string result = $sformatf("dir: %0s, addr: %0x", dir.name(), address) ;
-
-        if(dir == APB_WRITE)begin
-            result = $sformatf("%0s, data: %0x", result, data) ;
-        end
+        string result = super.convert2string() ;
 
         result = $sformatf("%0s, pre_drive_delay: %0d, post_drive_delay: %0d", 
                             result, pre_drive_delay, post_drive_delay) ;
 
-        // $display("inside string result: %s", result) ;
         return result ;
     endfunction : convert2string
 

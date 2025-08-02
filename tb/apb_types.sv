@@ -13,6 +13,8 @@
 	// APB data:
 	typedef bit [`APB_MAX_DATA_WIDTH-1:0] apb_data ;
 
+	// APB response:
+	typedef enum bit {APB_OKAY = 0 , APB_ERR = 1} apb_response ;
 
 
 `endif
