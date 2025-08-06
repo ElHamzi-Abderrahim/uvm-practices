@@ -55,6 +55,7 @@ simulate: clean compile
 	vsim 	testbench \
 			$(VSIM_MODE) \
 			+UVM_TESTNAME=algn_test_reg_access \
+			+UVM_MAX_QUIT_COUNT=1 \
 			-do "set gui_mode $(GUI); \
 			add wave -position insertpoint  \
 				sim:/testbench/dut/clk \
