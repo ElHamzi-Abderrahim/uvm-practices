@@ -5,8 +5,13 @@ class apb_item_monitor extends apb_item_base;
   
     `uvm_object_utils(apb_item_monitor)
 
+    // APB Slave response (Error / No-Error)
     apb_response    response ;
+
+    // The delay between the current transaction and the previous
     int unsigned    prev_item_delay ;
+
+    // The length of the current transaction (cycles)
     int unsigned    length ;
 
     function new(string name="apb_item_monitor");

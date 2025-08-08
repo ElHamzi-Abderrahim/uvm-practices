@@ -34,7 +34,6 @@ class apb_monitor extends uvm_monitor;
         apb_item_monitor item = apb_item_monitor::type_id::create("item") ;
         
         int unsigned count_cyc_prv ;
-        int unsigned count_cyc_trns;
      
         // Monitoring the trasnaction:
 
@@ -62,10 +61,12 @@ class apb_monitor extends uvm_monitor;
         @(posedge vif.pclk) ;
         item.length++;
 
+        // Waiting for pready to be asserted by the APB Slave
         while(vif.pready !== 1'b1) begin
             @(posedge vif.pclk) ;
             item.length++;
             
+            // Checker for stucked transaction
             if(agent_config.get_has_checks()) begin
                 if(item.length >= agent_config.get_stuck_threshold()) begin
                     `uvm_error("PROTOCOL ERROR", $sformatf("APB transfer reached the stuck threshold limit of %0d clock cycles", item.length) )
@@ -73,6 +74,7 @@ class apb_monitor extends uvm_monitor;
             end
         end // while
 
+        // The APB Slave response
         item.response = apb_response'(vif.pslverr) ;
 
         apb_analysis_port.write(item) ;

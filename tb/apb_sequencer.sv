@@ -1,5 +1,5 @@
-`ifndef APB_SEQUENCER
-`define APB_SEQUENCER
+`ifndef APB_SEQUENCER_SV
+`define APB_SEQUENCER_SV
 
 class apb_sequencer extends uvm_sequencer #(.REQ(apb_item_drive));
     

@@ -1,5 +1,5 @@
-`ifndef APB_DRIVER
-`define APB_DRIVER
+`ifndef APB_DRIVER_SV
+`define APB_DRIVER_SV
 
 class apb_driver extends uvm_driver #(.REQ(apb_item_drive));
 

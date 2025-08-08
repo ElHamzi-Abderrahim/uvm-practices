@@ -1,5 +1,5 @@
 `ifndef APB_AGENT_CONFIG_SV
-  	`define APB_AGENT_CONFIG_SV
+`define APB_AGENT_CONFIG_SV
 	
 class apb_agent_config extends uvm_component;
 	
@@ -16,18 +16,17 @@ class apb_agent_config extends uvm_component;
 
 	// Number of clock cycles after which the APB trasnfer is considered stuck
 	local int unsigned stuck_threshold ;
+
+	// Switch to enable the coverage
+	local bit has_coverage ;
 	
 	function new(string name="", uvm_component parent=null);
 		super.new(name, parent);
 		active_passive  = UVM_ACTIVE ;
 		has_checks      = 1 ;
 		stuck_threshold = 1000 ;
+		has_coverage    = 1 ;
 	endfunction : new
-	
-	// Getter for the APB virtual interface:
-	virtual function apb_vif get_vif();
-		return vif;
-	endfunction : get_vif
 	
 	// Setter for the APB virtual interface:
 	virtual function void set_vif(apb_vif value); // To make sure the setting of vif is done just once.
@@ -39,6 +38,12 @@ class apb_agent_config extends uvm_component;
 			`uvm_fatal("ALGORITHM ISSUE", "Trying to set the virtual interface more than once.")
 		end
 	endfunction : set_vif
+	
+	// Getter for the APB virtual interface:
+	virtual function apb_vif get_vif();
+		return vif;
+	endfunction : get_vif
+
 
 	// Setter of the Agent type: 
 	virtual function void set_active_passive(uvm_active_passive_enum value);
@@ -49,6 +54,7 @@ class apb_agent_config extends uvm_component;
 	virtual function uvm_active_passive_enum get_active_passive();
 		return active_passive ;
 	endfunction : get_active_passive
+
 
 	// Setter for has_checks field
 	virtual function void set_has_checks(bit value);
@@ -78,6 +84,18 @@ class apb_agent_config extends uvm_component;
 		return stuck_threshold ;
 	endfunction : get_stuck_threshold
 
+
+	// Setter for has_coverage field
+	virtual function void set_has_coverage(bit value);
+		has_coverage = value ;
+	endfunction : set_has_coverage
+
+	// Getter for has_checks field
+	virtual function bit get_has_coverage();
+		return has_coverage ;
+	endfunction : get_has_coverage
+
+
 	// Checking if the vif is configured when starting the simulation:    
 	virtual function void start_of_simulation_phase(uvm_phase phase);
 		super.start_of_simulation_phase(phase);
@@ -93,7 +111,7 @@ class apb_agent_config extends uvm_component;
 
 	virtual task run_phase (uvm_phase phase);
 		forever begin
-			// If the field has changed
+			// If the has_checks field has changed
 			@(vif.has_checks) ; 
 
 			// Make sure it has not changed outside APB agent config

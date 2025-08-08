@@ -20,7 +20,7 @@ class apb_sequence_simple extends apb_sequence_base;
     task body();
         // start_item(item_drive);
         // finish_item(item_drive);
-        // `uvm_do(item_drive) : which uses randomize() method to randomize the fileds of the item.
+        // `uvm_do(item_drive) : which uses randomize() method to randomize the fileds of the item, which is a method that is not supprted by the free version of MoedelSim.
         `uvm_send(item_drive)
     endtask : body
  	

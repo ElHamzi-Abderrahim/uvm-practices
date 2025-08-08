@@ -1,5 +1,5 @@
 `ifndef APB_IF_SV
-	`define APB_IF_SV
+`define APB_IF_SV
 	
 	`ifndef APB_MAX_ADDRESS_WIDTH
 		`define APB_MAX_ADDRESS_WIDTH 16
@@ -28,27 +28,34 @@
 			has_checks = 1 ;
 		end
 
+
+		// Setup phase sequence
 		sequence setup_phase_s ;
 			(psel == 1) && ( ($past(psel) == 0) || (($past(psel) == 1) && ($past(pready) == 1)) ) ; 
 		endsequence
 
+		// Access phase sequence
 		sequence access_phase_s ; 
 			(psel == 1) && (penable == 1) ;
 		endsequence
 
+
+		/**************************************************************************/
+		/* RULE #1: PENABLE must be asserted in the second cycle of the transfer  */
+		/**************************************************************************/
+		/* NOTE: "Assertions" are not support by the free version of ModelSim :-( */
+		/**************************************************************************/
+		
+		// - PENABLE is deasserted in the setup phase 
 		property penable_at_setup_phase_p;
-			@(posedge pclk) disable iff (!presetn || !has_checks)
+			@(posedge pclk) disable iff (!presetn || !has_checks) // Don't check the property in reset phase (presetn == 0) and if checker is not enabled (has_checks == 0)
 			setup_phase_s |-> (penable == 0) ; // s1 |-> s2: (Overlapped implication) if there is a match of s1, s2 is evaluated on the same clock tick.
  		endproperty
 
 		PENABLE_AT_SETUP_PHASE_A : assert property(penable_at_setup_phase_p) else
 			$error("PENALBE at \'Setup Phase\' is not equal to 0.") ;
 
-		/* NOTE: "Assertions" are not support by the free version of ModelSim :-( */
-
-		/**************************************************************************/
-		/* RULE #1: PENABLE must be asserted in the second cycle of the transfer  */
-		/**************************************************************************/
+		// - PENABLE is assreted after one cycle of the setup phase 
 		property penable_at_entering_access_phase_p;
 			@(posedge pclk) disable iff (!presetn || !has_checks)
 			setup_phase_s |=> (penable == 1) ; // s1 |=> s2 : (Non-Overlapped implication) if there is a match of s1, s2 is evaluated on the next clock tick.
@@ -71,12 +78,13 @@
 			$error("PENALBE when exiting \'Access Phase\' is not equal to 0 .") ;
 		/**************************************************************************/
 
+
 		/**************************************************************************/
 		/* RULE #3: Master driver signals must be remain stable at access phase   */
 		/**************************************************************************/
 		property penable_stable_at_access_phase_p;
 			@(posedge pclk) disable iff (!presetn || !has_checks)
-			access_phase_s |-> (penable == 1) ;
+			access_phase_s |-> (penable == 1) ; // In access phase PENALBE should have stable value of "1"
  		endproperty
 
 		PENABLE_STABLE_ACCESS_PHASE_A : assert property(penable_stable_at_access_phase_p) else
@@ -85,7 +93,7 @@
 
 		property pwrite_stable_at_access_phase_p;
 			@(posedge pclk) disable iff (!presetn || !has_checks)
-			access_phase_s |-> $stable(pwrite) ;
+			access_phase_s |-> $stable(pwrite) ; // $stable() is used rather than "0" or "1" because we can't know if it's a Read or Write operation
  		endproperty
 
 		PWRITE_STABLE_ACCESS_PHASE_A : assert property(pwrite_stable_at_access_phase_p) else
@@ -108,8 +116,8 @@
 
 		PWDATA_STABLE_ACCESS_PHASE_A : assert property(pwdata_stable_at_access_phase_p) else
 			$error("PWDATA was not stable druing \'Access Phase\' .") ;
-
 		/**************************************************************************/ 
+
 
 		/**************************************************************************/
 		/* RULE #4: APB signals can not have unknown values (x, z)                */
@@ -184,7 +192,6 @@
 
 		UNKNOWN_VALUE_PSLVERR_A : assert property(unknown_value_pslverr_p) else
 			$error("Detected unknown value for APB signal PSLVERR .") ;
-
 		/**************************************************************************/
 
     endinterface

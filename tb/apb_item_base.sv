@@ -6,7 +6,7 @@ class apb_item_base extends uvm_sequence_item;
     `uvm_object_utils(apb_item_base)
 
     // rand apb_dir dir ;
-    apb_dir dir ;
+    apb_dir dir ; // APB_READ or APB_WRITE
 
     apb_addr address ;
 
