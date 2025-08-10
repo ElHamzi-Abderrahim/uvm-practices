@@ -17,5 +17,5 @@ class algn_test_base extends uvm_test;
   
 endclass : algn_test_base
 
-`endif
+`endif // `ifndef ALGN_TEST_BASE_SV
 

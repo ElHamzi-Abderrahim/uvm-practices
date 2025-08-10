@@ -40,6 +40,7 @@
 		endsequence
 
 
+        `ifdef ASSERTIONS_SUPPORTED
 		/**************************************************************************/
 		/* RULE #1: PENABLE must be asserted in the second cycle of the transfer  */
 		/**************************************************************************/
@@ -194,6 +195,7 @@
 			$error("Detected unknown value for APB signal PSLVERR .") ;
 		/**************************************************************************/
 
+		`endif // `ifdef ASSERTIONS_SUPPORTED
     endinterface
 	
-`endif
+`endif // `ifndef APB_IF_SV

@@ -1,5 +1,5 @@
 `ifndef APB_TYPES_SV
-  	`define APB_TYPES_SV
+`define APB_TYPES_SV
 	
 	// Virtual interface type:
 	typedef virtual apb_if apb_vif;
@@ -17,4 +17,4 @@
 	typedef enum bit {APB_OKAY = 0 , APB_ERR = 1} apb_response ;
 
 
-`endif
+`endif // `ifndef APB_TYPES_SV

@@ -86,4 +86,4 @@ class apb_monitor extends uvm_monitor;
   
 endclass : apb_monitor
 
-`endif
+`endif // `ifndef APB_MONITOR_SV

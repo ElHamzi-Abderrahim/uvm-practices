@@ -10,4 +10,4 @@
 		
     endpackage
 
-`endif
+`endif // `ifndef ALGN_PKG_SV

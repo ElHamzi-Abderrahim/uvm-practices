@@ -13,4 +13,4 @@
         `include "algn_test_reg_access.sv"
     endpackage
 
-`endif
+`endif // `ifndef ALGN_TEST_PKG_SV

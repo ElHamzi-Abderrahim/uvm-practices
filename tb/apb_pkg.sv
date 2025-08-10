@@ -27,5 +27,5 @@
 
 
 
-`endif
+`endif // `ifndef APB_PKG_SV
 

@@ -1,5 +1,5 @@
 `ifndef ALGN_ENV_SV
-    `define ALGN_ENV_SV
+`define ALGN_ENV_SV
 
 class algn_env extends uvm_env;
   
@@ -18,7 +18,7 @@ class algn_env extends uvm_env;
 
 endclass
 
-`endif
+`endif // `ifndef ALGN_ENV_SV
 
 
 

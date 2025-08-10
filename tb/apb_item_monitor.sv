@@ -30,4 +30,4 @@ class apb_item_monitor extends apb_item_base;
 
 endclass : apb_item_monitor
 
-`endif
+`endif // `ifndef APB_ITEM_MONITOR_SV

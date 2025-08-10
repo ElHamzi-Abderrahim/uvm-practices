@@ -1,5 +1,5 @@
 `ifndef APB_SEQUENCE_BASE
-    `define APB_SEQUENCE_BASE
+`define APB_SEQUENCE_BASE
 
 class apb_sequence_base extends uvm_sequence #(.REQ(apb_item_drive));
   
@@ -13,4 +13,5 @@ class apb_sequence_base extends uvm_sequence #(.REQ(apb_item_drive));
 
 endclass : apb_sequence_base
 
-`endif
+`endif // `ifndef APB_SEQUENCE_BASE
+

@@ -12,4 +12,4 @@ class apb_sequencer extends uvm_sequencer #(.REQ(apb_item_drive));
 
 endclass : apb_sequencer
 
-`endif
+`endif // `ifndef APB_SEQUENCER_SV
