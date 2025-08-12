@@ -123,7 +123,7 @@ class apb_agent_config extends uvm_component;
 	endtask
 
                           
-endclass
+endclass : apb_agent_config
 	
 	
-`endif
+`endif // `ifndef APB_AGENT_CONFIG_SV

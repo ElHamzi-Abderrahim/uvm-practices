@@ -7,12 +7,19 @@ class apb_agent extends uvm_agent;
 
 	// configuration class Handler.
 	apb_agent_config 	agent_config ;	
+
 	// APB sequencer Handler.	
 	apb_sequencer 		apb_sequencer_h;
+
 	// APB driver Handler.
-	apb_driver 			apb_driver_h;		
+	apb_driver 			apb_driver_h;	
+
 	// APB monitor Handler.
-	apb_monitor			apb_monitor_h;		
+	apb_monitor			apb_monitor_h;	
+
+	// APB coverage Handler.
+	apb_coverage    	apb_coverage_h;	
+
 
 	function new(string name = "", uvm_component parent);
 		super.new(name, parent);
@@ -21,11 +28,15 @@ class apb_agent extends uvm_agent;
 	virtual function void build_phase(uvm_phase phase);
 		super.build_phase(phase);
 		agent_config = apb_agent_config::type_id::create("agent_config", this);
+		apb_monitor_h   = apb_monitor::type_id::create("apb_monitor_h", this);
 
 		if(agent_config.active_passive == UVM_ACTIVE) begin
 			apb_sequencer_h = apb_sequencer::type_id::create("apb_sequencer_h", this);
 			apb_driver_h    = apb_driver::type_id::create("apb_driver_h", this);
-			apb_monitor_h   = apb_monitor::type_id::create("apb_monitor_h", this);
+		end
+
+		if(agent_config.get_has_coverage() == 1) begin
+			apb_coverage_h  = apb_coverage::type_id::create("apb_coverage_h", this); 
 		end
 
 	endfunction : build_phase
@@ -48,17 +59,28 @@ class apb_agent extends uvm_agent;
 			agent_config.set_vif(vif);
 		end
 
-		// Connecting the Driver and Sequencer if the Agent is active:
+		// Pass the pointer of agent config to the monitor
+		apb_monitor_h.agent_config = agent_config ;
+		
+		// Connecting the Driver and Sequencer if the Agent is in ACTIVE mode:
 		if(agent_config.get_active_passive() == UVM_ACTIVE) begin
 			apb_driver_h.seq_item_port.connect(apb_sequencer_h.seq_item_export);
+			
+			// Pass the pointer of agent config to the driver
 			apb_driver_h.agent_config = agent_config ;
-			apb_monitor_h.agent_config = agent_config ;
 		end
 
+		// Connecting Monitor to Coverage component if the Agent has coverage:
+		if(agent_config.get_has_coverage() == 1) begin
+			// apb_monitor_h.apb_analysis_port.connect(apb_coverage_h.apb_analysis_export) ; // for (+ Methode-1)
+			apb_monitor_h.apb_analysis_port.connect(apb_coverage_h.port_item) ; // for (+ Methode-2)
+			apb_coverage_h.agent_config = agent_config ;
+
+		end
 
 	endfunction : connect_phase
 
 	
 endclass : apb_agent
 	
-`endif
+`endif // `ifndef APB_AGENT_SV
