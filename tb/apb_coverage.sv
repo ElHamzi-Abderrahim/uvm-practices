@@ -51,8 +51,8 @@ class apb_cover_index_wrapper  #(int unsigned MAX_VALUE_PLUS_1 = 16) extends apb
 
     virtual function string coverage2string();
         string result = {
-            $sformatf("\n cover_index      :  %03.2f %%", cover_item.get_inst_coverage()) ,
-            $sformatf("\n   - index        :  %03.2f %%", cover_item.index.get_inst_coverage()),
+            $sformatf("\n cover_index      :  %03.2f %%", cover_index.get_inst_coverage()) ,
+            $sformatf("\n   - index        :  %03.2f %%", cover_index.index.get_inst_coverage())
         } ;
 
         return result ;
@@ -183,7 +183,7 @@ class apb_coverage extends uvm_component ;
         string result = {
             $sformatf("\n cover_item     :  %03.2f %%", cover_item.get_inst_coverage()) ,
             $sformatf("\n   - direction             :  %03.2f %%", cover_item.direction.get_inst_coverage()),
-            $sformatf("\n   - response              :  %03.2f %%", cover_item.Response.get_inst_coverage()),
+          $sformatf("\n   - response              :  %03.2f %%", cover_item.response.get_inst_coverage()),
             $sformatf("\n   - length                :  %03.2f %%", cover_item.length.get_inst_coverage()),
             $sformatf("\n   - prev_item_delay       :  %03.2f %%", cover_item.prev_item_delay.get_inst_coverage()),
             $sformatf("\n   - response_x_direction  :  %03.2f %%", cover_item.response_x_direction.get_inst_coverage()),
@@ -227,12 +227,12 @@ class apb_coverage extends uvm_component ;
     virtual function void build_phase(uvm_phase phase);
         super.build_phase(phase) ;
 `ifdef COVERAGE_SUPPORTED
-        wrap_cov_addr_0         = apb_cover_index_wrapper#(`APB_MAX_ADDRESS_WIDTH)::type_id::create("wrap_cov_addr_0");
-        wrap_cov_addr_1         = apb_cover_index_wrapper#(`APB_MAX_ADDRESS_WIDTH)::type_id::create("wrap_cov_addr_1");
-        wrap_cov_wr_data_0      = apb_cover_index_wrapper#(`APB_MAX_DATA_WIDTH)::type_id::create("wrap_cov_wr_data_0");
-        wrap_cov_wr_data_1      = apb_cover_index_wrapper#(`APB_MAX_DATA_WIDTH)::type_id::create("wrap_cov_wr_data_1");
-        wrap_cov_rd_data_0      = apb_cover_index_wrapper#(`APB_MAX_DATA_WIDTH)::type_id::create("wrap_cov_rd_data_0");
-        wrap_cov_rd_data_1      = apb_cover_index_wrapper#(`APB_MAX_DATA_WIDTH)::type_id::create("wrap_cov_rd_data_1");
+        wrap_cov_addr_0         = apb_cover_index_wrapper#(`APB_MAX_ADDRESS_WIDTH)::type_id::create("wrap_cov_addr_0", this);
+        wrap_cov_addr_1         = apb_cover_index_wrapper#(`APB_MAX_ADDRESS_WIDTH)::type_id::create("wrap_cov_addr_1", this);
+        wrap_cov_wr_data_0      = apb_cover_index_wrapper#(`APB_MAX_DATA_WIDTH)::type_id::create("wrap_cov_wr_data_0", this);
+        wrap_cov_wr_data_1      = apb_cover_index_wrapper#(`APB_MAX_DATA_WIDTH)::type_id::create("wrap_cov_wr_data_1", this);
+        wrap_cov_rd_data_0      = apb_cover_index_wrapper#(`APB_MAX_DATA_WIDTH)::type_id::create("wrap_cov_rd_data_0", this);
+        wrap_cov_rd_data_1      = apb_cover_index_wrapper#(`APB_MAX_DATA_WIDTH)::type_id::create("wrap_cov_rd_data_1", this);
 `endif // `ifdef COVERAGE_SUPPORTED
     
     endfunction : build_phase
@@ -272,7 +272,7 @@ class apb_coverage extends uvm_component ;
         end
 
         for(int i = 0; i < `APB_MAX_DATA_WIDTH; i++) begin
-            case(item.dir) begin
+            case(item.dir) 
                 APB_WRITE : begin
                     if(item.data[i]) begin
                         wrap_cov_wr_data_1.sample(i);
@@ -289,11 +289,10 @@ class apb_coverage extends uvm_component ;
                     end     
                 end  
 
-                default : begin
+                default :
                     `uvm_error("ALGORITHM ISSUE", $sformatf("Current version of the code does not support item.dir: %0s", item.dir.name()))
-                end
 
-            end
+            endcase
 
         end
 

@@ -4,10 +4,11 @@
 class apb_sequence_rw extends apb_sequence_base;
   
     `uvm_object_utils(apb_sequence_rw)
-    
+   
+  apb_item_drive item_drive;
 
 `ifndef RANDOMIZATION_SUPPORTED
-    apb_item_drive item_drive;
+    
     apb_addr addr ;             
     apb_data rw_data ;
 `endif // `ifndef RANDOMIZATION_SUPPORTED    
@@ -78,10 +79,10 @@ class apb_sequence_rw extends apb_sequence_base;
             dir == APB_READ;
             addr == local::addr;
         });
-        `uvm_do_with(item, {
-            dir  == CFS_APB_WRITE;
+      `uvm_do_with(item_drive, {
+            dir  == APB_WRITE;
             addr == local::addr;
-            data == wr_data;
+            data == rw_data;
         });
 `endif // `ifdef RANDOMIZATION_SUPPORTED    
     endtask : body

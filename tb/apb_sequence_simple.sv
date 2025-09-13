@@ -4,7 +4,11 @@
 class apb_sequence_simple extends apb_sequence_base;
   
     `uvm_object_utils(apb_sequence_simple)
-
+  
+`ifdef RANDOMIZATION_SUPPORTED
+    rand apb_item_drive item_drive ;
+`endif // `ifdef RANDOMIZATION_SUPPORTED                
+  
 `ifndef RANDOMIZATION_SUPPORTED
     apb_item_drive item_drive ;
 `endif // `ifndef RANDOMIZATION_SUPPORTED                

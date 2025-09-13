@@ -42,7 +42,7 @@ class apb_sequence_random extends apb_sequence_base;
 `endif // `ifndef RANDOMIZATION_SUPPORTED                
 
 `ifdef RANDOMIZATION_SUPPORTED
-            `void(seq_simple.randomize());
+            void'(seq_simple.randomize());
 `endif // `ifdef RANDOMIZATION_SUPPORTED                
             
             seq_simple.start(m_sequencer, this); 

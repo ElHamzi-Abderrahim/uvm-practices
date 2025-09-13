@@ -7,16 +7,16 @@
    
 */
 
+// Macros for the supported features by the Simulator:
+// `define RANDOMIZATION_SUPPORTED
+// `define ASSERTIONS_SUPPORTED
+// `define COVERAGE_SUPPORTED
+
 `include "design.sv"
 `include "algn_test_pkg.sv"
 
 `timescale 1ns/10ps
 
-
-// Macros for the supported features by the Simulator:
-// `define RANDOMIZATION_SUPPORTED
-// `define ASSERTIONS_SUPPORTED
-// `define COVERAGE_SUPPORTED
 
 
 module testbench();

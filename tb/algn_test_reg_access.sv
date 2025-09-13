@@ -45,10 +45,10 @@ class algn_test_reg_access extends algn_test_base;
 `endif // `ifndef RANDOMIZATION_SUPPORTED      
 
 `ifdef RANDOMIZATION_SUPPORTED
-				void'(seq_simple.randomize() with {
-					item.addr == 'h0;
-					item.dir  == CFS_APB_WRITE;
-					item.data == 'h0011;
+				void'(apb_seq_simple.randomize() with {
+					item_drive.address == 'h0;
+					item_drive.dir  == APB_WRITE;
+					item_drive.data == 'h0011;
 				});
 `endif // `ifdef RANDOMIZATION_SUPPORTED                
 				apb_seq_simple.start(env.apb_agent_h.apb_sequencer_h) ;
@@ -63,7 +63,7 @@ class algn_test_reg_access extends algn_test_base;
 `endif // `ifndef RANDOMIZATION_SUPPORTED    
 
 `ifdef RANDOMIZATION_SUPPORTED		
-				void'(seq_rw.randomize() with {
+				void'(apb_seq_rw.randomize() with {
 					addr == 'hC;
 				});
 `endif // `ifdef RANDOMIZATION_SUPPORTED                				
@@ -78,7 +78,7 @@ class algn_test_reg_access extends algn_test_base;
 				apb_seq_rnd.num_items = 5 ;
 `endif // `ifndef RANDOMIZATION_SUPPORTED    
 `ifdef RANDOMIZATION_SUPPORTED		
-				 void'(seq_random.randomize() with {
+				 void'(apb_seq_rnd.randomize() with {
 					num_items == 3;
 				});
 `endif // `ifdef RANDOMIZATION_SUPPORTED        
@@ -96,7 +96,10 @@ class algn_test_reg_access extends algn_test_base;
 			// apb_seq_simple.item_drive.data    = 'h11 ;
 			// apb_seq_simple.start(env.apb_agent_h.apb_sequencer_h) ;
 			apb_sequence_random apb_seq_rnd = apb_sequence_random::type_id::create("apb_seq_rnd") ;
+
+`ifndef RANDOMIZATION_SUPPORTED
 			apb_seq_rnd.randomize_user();
+`endif // `ifndef RANDOMIZATION_SUPPORTED    
 			apb_seq_rnd.num_items = 5 ;
 			apb_seq_rnd.start(env.apb_agent_h.apb_sequencer_h) ;
 		end 
