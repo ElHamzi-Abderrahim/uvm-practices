@@ -104,9 +104,9 @@ module testbench();
     /* Reset generator: */
     initial begin
         apb_if_inst.presetn = 1;
-      	repeat(1) @(posedge tb_clk) ; // wait for 1 clock cycles.
+      	#3ns ;
         apb_if_inst.presetn = 0;
-      	repeat(3) @(posedge tb_clk) ; // wait for 7 clock cycles before deasserting the rest signal.
+      	#30ns ;
         apb_if_inst.presetn = 1;
     end
 

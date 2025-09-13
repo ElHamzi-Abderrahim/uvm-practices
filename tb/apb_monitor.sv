@@ -1,7 +1,7 @@
 `ifndef APB_MONITOR_SV
 `define APB_MONITOR_SV
 
-class apb_monitor extends uvm_monitor;
+class apb_monitor extends uvm_monitor implements apb_reset_handler;
 
     `uvm_component_utils(apb_monitor)
 
@@ -9,21 +9,42 @@ class apb_monitor extends uvm_monitor;
 
     // Pointer to agent configuration
     apb_agent_config agent_config ;
-    
+
+    // Process for collect_transactions() task 
+    protected process process_collect_transactions ; 
+
     function new(string name="", uvm_component parent);
         super.new(name, parent);
         apb_analysis_port = new("apb_analysis_port", this) ;
     endfunction:new
 
+    virtual task wait_reset_end() ;
+        agent_config.wait_reset_end(); 
+    endtask : wait_reset_end 
 
     virtual task run_phase(uvm_phase phase);
-        collect_transactions();
+        forever begin
+            fork
+                begin
+                    wait_reset_end() ;
+                    collect_transactions();
+                    disable fork ;
+                end             
+            join
+        end
     endtask : run_phase
 
     protected virtual task collect_transactions();
-        forever begin
-            collect_transaction();
-        end
+        fork 
+            begin
+                process_collect_transactions = process::self() ; 
+
+                forever begin
+                    collect_transaction();
+                end
+
+            end 
+        join 
     endtask : collect_transactions
 
 
@@ -83,7 +104,18 @@ class apb_monitor extends uvm_monitor;
         @(posedge vif.pclk) ;
 
     endtask : collect_transaction
-  
+    
+    virtual function void handle_reset(uvm_phase phase) ; 
+        if(process_collect_transactions != null) begin
+            process_collect_transactions.kill() ;
+
+            process_collect_transactions = null ;
+        
+        end
+    endfunction: handle_reset
+
+
+
 endclass : apb_monitor
 
 `endif // `ifndef APB_MONITOR_SV

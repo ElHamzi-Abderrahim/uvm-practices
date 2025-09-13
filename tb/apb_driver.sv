@@ -1,7 +1,7 @@
 `ifndef APB_DRIVER_SV
 `define APB_DRIVER_SV
 
-class apb_driver extends uvm_driver #(.REQ(apb_item_drive));
+class apb_driver extends uvm_driver #(.REQ(apb_item_drive)) implements apb_reset_handler;
 
     `uvm_component_utils(apb_driver)
 
@@ -9,6 +9,9 @@ class apb_driver extends uvm_driver #(.REQ(apb_item_drive));
     apb_agent_config    agent_config ;
     
     apb_item_drive      apb_d_item ;
+
+    // Process for drive_transaction() task 
+    protected process process_drive_transactions ;
 
 
     function new(string name="", uvm_component parent);
@@ -19,25 +22,35 @@ class apb_driver extends uvm_driver #(.REQ(apb_item_drive));
         super.build_phase(phase);
     endfunction:build_phase
 
+    virtual task wait_reset_end() ;
+        agent_config.wait_reset_end(); 
+    endtask : wait_reset_end 
+ 	
+
     virtual task run_phase(uvm_phase phase);
-        drive_transactions();
+        forever begin
+            fork
+                begin 
+                    wait_reset_end() ;
+                    drive_transactions();          
+                    disable fork ;
+                end
+            join
+        end
     endtask : run_phase
 
     protected virtual task drive_transactions();
-        apb_vif vif = agent_config.get_vif() ;
+        fork
+            begin
+                process_drive_transactions = process::self() ;
 
-        // Signals initialization:
-        vif.psel    <= 0 ;
-        vif.penable <= 0 ;
-        vif.pwrite  <= 0 ;
-        vif.paddr   <= '0 ;
-        vif.pwdata  <= '0 ;
-
-        forever begin
-            seq_item_port.get_next_item(apb_d_item);
-            drive_transaction(apb_d_item);
-            seq_item_port.item_done();
-        end
+                forever begin
+                    seq_item_port.get_next_item(apb_d_item);
+                    drive_transaction(apb_d_item);
+                    seq_item_port.item_done();
+                end 
+            end
+        join    
     endtask : drive_transactions
 
 
@@ -83,10 +96,28 @@ class apb_driver extends uvm_driver #(.REQ(apb_item_drive));
             @(posedge vif.pclk) ;
         end
 
-
     endtask : drive_transaction
-  
- 	
+
+    // Funtion to handle reset:
+    virtual function void handle_reset(uvm_phase phase) ; 
+        apb_vif vif = agent_config.get_vif() ;
+
+        if(process_drive_transactions != null) begin
+            process_drive_transactions.kill() ; 
+
+            process_drive_transactions = null ;
+        end
+
+        // Signals initialization:
+        vif.psel    <= 0 ;
+        vif.penable <= 0 ;
+        vif.pwrite  <= 0 ;
+        vif.paddr   <= '0 ;
+        vif.pwdata  <= '0 ;      
+
+    endfunction : handle_reset
+
+
 endclass : apb_driver
 
 `endif // `ifndef APB_DRIVER_SV

@@ -122,7 +122,21 @@ class apb_agent_config extends uvm_component;
 		end
 	endtask
 
-                          
+	// Detecting the start of reset:
+	virtual task wait_reset_start();
+		if(vif.presetn !== 0) begin
+			@(negedge vif.presetn) ; // asserting the reset is Asynchronous
+		end
+	endtask: wait_reset_start
+    
+	// Detecting the end of reset:
+	virtual task wait_reset_end();
+		if(vif.presetn === 0) begin
+			@(posedge vif.pclk) ; // de-asserting the reset is Synchronous
+		end
+	endtask: wait_reset_end                      
+
+	
 endclass : apb_agent_config
 	
 	
