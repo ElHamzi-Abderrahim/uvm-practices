@@ -64,7 +64,7 @@ endclass : apb_cover_index_wrapper
 
 
 
-class apb_coverage extends uvm_component ;
+class apb_coverage extends uvm_component implements apb_reset_handler ;
 
     `uvm_component_utils(apb_coverage) 
 
@@ -77,8 +77,8 @@ class apb_coverage extends uvm_component ;
 
     apb_agent_config agent_config ;
 
-`ifdef COVERAGE_SUPPORTED
-    
+
+    `ifdef COVERAGE_SUPPORTED
     // Wrapper over the coverage group covering the inidices of the PADDR signal 
     // for the bits of PADDR that has been 0
     apb_cover_index_wrapper#(`APB_MAX_ADDRESS_WIDTH) wrap_cov_addr_0 ;
@@ -149,7 +149,6 @@ class apb_coverage extends uvm_component ;
     
     endgroup // cover_item
 
-
     covergroup cover_reset with function sample(bit psel);
         option.per_instance = 1 ;
 
@@ -158,32 +157,32 @@ class apb_coverage extends uvm_component ;
         }
     endgroup // cover_reset
 
-`endif // `ifdef COVERAGE_SUPPORTED
+    `endif // `ifdef COVERAGE_SUPPORTED
 
 
     function new(string name="", uvm_component parent);
         super.new(name, parent);
 
-`ifdef COVERAGE_SUPPORTED
+        `ifdef COVERAGE_SUPPORTED
         cover_item  = new();
         cover_item.set_inst_name($sformatf("%s_%s", get_full_name(), "cover_item")) ;
         
         cover_reset = new();
         cover_reset.set_inst_name($sformatf("%s_%s", get_full_name(), "cover_reset")) ;
-`endif // COVERAGE_SUPPORTED
+        `endif // COVERAGE_SUPPORTED
 
         // apb_analysis_export = new("apb_analysis_export", this) ;
         port_item = new("port_item", this) ;
 
     endfunction : new
 
-`ifdef COVERAGE_SUPPORTED
+    `ifdef COVERAGE_SUPPORTED
     // NOTE: This is function is used to show coverage persentage when using EDAPlayground Platform for simulation.
     virtual function string coverage2string();
         string result = {
             $sformatf("\n cover_item     :  %03.2f %%", cover_item.get_inst_coverage()) ,
             $sformatf("\n   - direction             :  %03.2f %%", cover_item.direction.get_inst_coverage()),
-          $sformatf("\n   - response              :  %03.2f %%", cover_item.response.get_inst_coverage()),
+            $sformatf("\n   - response              :  %03.2f %%", cover_item.response.get_inst_coverage()),
             $sformatf("\n   - length                :  %03.2f %%", cover_item.length.get_inst_coverage()),
             $sformatf("\n   - prev_item_delay       :  %03.2f %%", cover_item.prev_item_delay.get_inst_coverage()),
             $sformatf("\n   - response_x_direction  :  %03.2f %%", cover_item.response_x_direction.get_inst_coverage()),
@@ -226,28 +225,30 @@ class apb_coverage extends uvm_component ;
 
     virtual function void build_phase(uvm_phase phase);
         super.build_phase(phase) ;
-`ifdef COVERAGE_SUPPORTED
+        `ifdef COVERAGE_SUPPORTED
         wrap_cov_addr_0         = apb_cover_index_wrapper#(`APB_MAX_ADDRESS_WIDTH)::type_id::create("wrap_cov_addr_0", this);
         wrap_cov_addr_1         = apb_cover_index_wrapper#(`APB_MAX_ADDRESS_WIDTH)::type_id::create("wrap_cov_addr_1", this);
         wrap_cov_wr_data_0      = apb_cover_index_wrapper#(`APB_MAX_DATA_WIDTH)::type_id::create("wrap_cov_wr_data_0", this);
         wrap_cov_wr_data_1      = apb_cover_index_wrapper#(`APB_MAX_DATA_WIDTH)::type_id::create("wrap_cov_wr_data_1", this);
         wrap_cov_rd_data_0      = apb_cover_index_wrapper#(`APB_MAX_DATA_WIDTH)::type_id::create("wrap_cov_rd_data_0", this);
         wrap_cov_rd_data_1      = apb_cover_index_wrapper#(`APB_MAX_DATA_WIDTH)::type_id::create("wrap_cov_rd_data_1", this);
-`endif // `ifdef COVERAGE_SUPPORTED
+        `endif // `ifdef COVERAGE_SUPPORTED
     
     endfunction : build_phase
 
 
-    virtual task run_phase(uvm_phase phase);
+
+
+    // handling reset function
+    virtual function void handle_reset(uvm_phase phase) ;
         apb_vif vif = agent_config.get_vif() ;
-`ifdef COVERAGE_SUPPORTED
+        `ifdef COVERAGE_SUPPORTED
         forever begin
             @(negedge vif.presetn) ;
             cover_reset.sample(vif.psel) ;
         end
-`endif // `ifdef COVERAGE_SUPPORTED        
-    endtask : run_phase
-
+        `endif // `ifdef COVERAGE_SUPPORTED        
+    endfunction : handle_reset 
 
 
     // + Methode-1: Implementation of the write() methode of "apb_analysis_export" associated with "uvm_analysis_port" (the API)
@@ -259,7 +260,7 @@ class apb_coverage extends uvm_component ;
     // + Methode-2: Implementation of the write() associated with "port_item"
     //      NOTE: the methode name should also be postfixed with "_item"
     virtual function void write_item(apb_item_monitor item) ;
-`ifdef COVERAGE_SUPPORTED
+        `ifdef COVERAGE_SUPPORTED
         cover_item.sample(item) ;
         $display("DEBUG: %s", $sformatf("Coverage: %0s", coverage2string())) ;
 
@@ -295,7 +296,7 @@ class apb_coverage extends uvm_component ;
             endcase
         end
 
-`endif // `ifdef COVERAGE_SUPPORTED
+        `endif // `ifdef COVERAGE_SUPPORTED
 
     endfunction : write_item
 

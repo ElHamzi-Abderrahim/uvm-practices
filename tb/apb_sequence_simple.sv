@@ -28,14 +28,14 @@ class apb_sequence_simple extends apb_sequence_base;
     
     
     task body();
-`ifdef RANDOMIZATION_SUPPORTED
+        `ifdef RANDOMIZATION_SUPPORTED
         start_item(item_drive);
         finish_item(item_drive);
-`endif // `ifdef RANDOMIZATION_SUPPORTED         
+        `endif // `ifdef RANDOMIZATION_SUPPORTED         
 
-`ifndef RANDOMIZATION_SUPPORTED
+        `ifndef RANDOMIZATION_SUPPORTED
         `uvm_send(item_drive)
-`endif // `ifndef RANDOMIZATION_SUPPORTED                        
+        `endif // `ifndef RANDOMIZATION_SUPPORTED                        
     endtask : body
  	
 

@@ -18,9 +18,13 @@ class apb_monitor extends uvm_monitor implements apb_reset_handler;
         apb_analysis_port = new("apb_analysis_port", this) ;
     endfunction:new
 
+
+
     virtual task wait_reset_end() ;
         agent_config.wait_reset_end(); 
     endtask : wait_reset_end 
+
+
 
     virtual task run_phase(uvm_phase phase);
         forever begin
@@ -34,18 +38,19 @@ class apb_monitor extends uvm_monitor implements apb_reset_handler;
         end
     endtask : run_phase
 
+
+
     protected virtual task collect_transactions();
         fork 
             begin
                 process_collect_transactions = process::self() ; 
-
                 forever begin
                     collect_transaction();
                 end
-
             end 
         join 
     endtask : collect_transactions
+
 
 
     protected virtual task collect_transaction();
@@ -105,6 +110,8 @@ class apb_monitor extends uvm_monitor implements apb_reset_handler;
 
     endtask : collect_transaction
     
+
+
     virtual function void handle_reset(uvm_phase phase) ; 
         if(process_collect_transactions != null) begin
             process_collect_transactions.kill() ;
@@ -113,7 +120,6 @@ class apb_monitor extends uvm_monitor implements apb_reset_handler;
         
         end
     endfunction: handle_reset
-
 
 
 endclass : apb_monitor

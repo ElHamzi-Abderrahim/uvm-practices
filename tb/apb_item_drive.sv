@@ -6,14 +6,14 @@ class apb_item_drive extends apb_item_base;
     `uvm_object_utils(apb_item_drive)
 
 
-`ifndef RANDOMIZATION_SUPPORTED
+    `ifndef RANDOMIZATION_SUPPORTED
     // Pre drive delay 
     int unsigned pre_drive_delay ;
     // Post drive delay
     int unsigned post_drive_delay ;
-`endif // `ifndef RANDOMIZATION_SUPPORTED
+    `endif // `ifndef RANDOMIZATION_SUPPORTED
 
-`ifdef RANDOMIZATION_SUPPORTED
+    `ifdef RANDOMIZATION_SUPPORTED
     rand int unsigned pre_drive_delay ;
     rand int unsigned post_drive_delay ;
 
@@ -24,7 +24,7 @@ class apb_item_drive extends apb_item_base;
     constraint post_drive_delay_default {
         soft post_drive_delay <= 5 ;
     }
-`endif // `ifdef RANDOMIZATION_SUPPORTED
+    `endif // `ifdef RANDOMIZATION_SUPPORTED
 
 
 
@@ -34,7 +34,7 @@ class apb_item_drive extends apb_item_base;
   
 
 
-`ifndef RANDOMIZATION_SUPPORTED
+    `ifndef RANDOMIZATION_SUPPORTED
     // Alternative solution for randomizing object fields, due to the need of license for 
     // randomization features in the free version of modelsim.
     virtual function void randomize_user();
@@ -45,7 +45,7 @@ class apb_item_drive extends apb_item_base;
         this.post_drive_delay    = $urandom_range(0, 5) ; 
         // $display("dir: %0x, address: %0x, data: %0x, pre_dr_delay: %0x, post_dr_delay: %0x", this.dir, this.address, this.data, this.pre_drive_delay, this.post_drive_delay);
     endfunction : randomize_user
-`endif // `ifndef RANDOMIZATION_SUPPORTED    
+    `endif // `ifndef RANDOMIZATION_SUPPORTED    
     
 
 

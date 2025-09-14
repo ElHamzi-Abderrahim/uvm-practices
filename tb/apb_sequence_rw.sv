@@ -41,7 +41,7 @@ class apb_sequence_rw extends apb_sequence_base;
 
 
     task body();
-`ifndef RANDOMIZATION_SUPPORTED
+        `ifndef RANDOMIZATION_SUPPORTED
         // Overwrite the randomized fields to be constrained:
         item_drive.dir        = APB_READ ;
         item_drive.address    = this.addr ;
@@ -54,8 +54,8 @@ class apb_sequence_rw extends apb_sequence_base;
         item_drive.data       = this.rw_data ; 
         start_item(item_drive);
         finish_item(item_drive);
-`endif // `ifndef RANDOMIZATION_SUPPORTED
-`ifdef RANDOMIZATION_SUPPORTED
+        `endif // `ifndef RANDOMIZATION_SUPPORTED
+        `ifdef RANDOMIZATION_SUPPORTED
         //       cfs_apb_item_drv item = cfs_apb_item_drv::type_id::create("item");
         //       void'(item.randomize() with {
         //         dir  == CFS_APB_READ;
@@ -84,7 +84,7 @@ class apb_sequence_rw extends apb_sequence_base;
             addr == local::addr;
             data == rw_data;
         });
-`endif // `ifdef RANDOMIZATION_SUPPORTED    
+        `endif // `ifdef RANDOMIZATION_SUPPORTED    
     endtask : body
  	
 
