@@ -14,24 +14,24 @@ class algn_test_reg_access extends algn_test_base;
 		phase.raise_objection(this, "TEST_DONE");
 		`uvm_info("DUBUG", "Start of test", UVM_LOW)
 
-		#100; 
+		#(100ns); 
 		fork
 			begin
 				apb_vif vif = env.apb_agent_h.agent_config.get_vif();
 
-				repeat (3) begin
+				repeat (5) begin
 					@(posedge vif.psel);
 				end
 
-				#11ns ;
+				#(10ns) ;
 
-				vif.presetn <= '0 ;
+				vif.presetn <= 0 ;
 
 				repeat(4) begin
 					@(posedge vif.pclk) ;
 				end
 
-				vif.presetn <= '1 ;
+				vif.presetn <= 1 ;
 			end
 
 			begin
@@ -79,24 +79,17 @@ class algn_test_reg_access extends algn_test_base;
 `endif // `ifndef RANDOMIZATION_SUPPORTED    
 `ifdef RANDOMIZATION_SUPPORTED		
 				 void'(apb_seq_rnd.randomize() with {
-					num_items == 3;
+					num_items == 5;
 				});
 `endif // `ifdef RANDOMIZATION_SUPPORTED        
 
 				apb_seq_rnd.start(env.apb_agent_h.apb_sequencer_h) ;
 			end
 
-		join
+		join // END OF FORK STATEMENT
 
 		begin
-			// apb_sequence_simple apb_seq_simple = apb_sequence_simple::type_id::create("apb_seq_simple") ;
-			// apb_seq_simple.randomize_user() ;
-			// apb_seq_simple.item_drive.address = 'h0 ;
-			// apb_seq_simple.item_drive.dir     = APB_WRITE ;
-			// apb_seq_simple.item_drive.data    = 'h11 ;
-			// apb_seq_simple.start(env.apb_agent_h.apb_sequencer_h) ;
 			apb_sequence_random apb_seq_rnd = apb_sequence_random::type_id::create("apb_seq_rnd") ;
-
 `ifndef RANDOMIZATION_SUPPORTED
 			apb_seq_rnd.randomize_user();
 `endif // `ifndef RANDOMIZATION_SUPPORTED    
@@ -105,13 +98,6 @@ class algn_test_reg_access extends algn_test_base;
 		end 
 
 		#(100ns) ;
-		
-		// for(int i=0; i<10; i++) begin
-		// 	apb_item_drive item_drive = apb_item_drive::type_id::create("item_drive") ;
-		// 	item_drive.randomize_user();
-		// 	// `uvm_info("DEBUG", $sformatf("[%0d] item: %0s", i, item_drive.convert2string()), "UVM_LOW")
-		// 	$display("[DEBUG] %0s ", $sformatf("[%0d] item: %0s", i, item_drive.convert2string()));
-		// end
 
 		`uvm_info("DUBUG", "End of test", UVM_LOW)
 

@@ -8,7 +8,7 @@ class apb_driver extends uvm_driver #(.REQ(apb_item_drive)) implements apb_reset
     // Pointer to agent configuration
     apb_agent_config    agent_config ;
     
-    apb_item_drive      apb_d_item ;
+    // apb_item_drive      apb_d_item ;
 
     // Process for drive_transaction() task 
     protected process process_drive_transactions ;
@@ -32,7 +32,8 @@ class apb_driver extends uvm_driver #(.REQ(apb_item_drive)) implements apb_reset
             fork
                 begin 
                     wait_reset_end() ;
-                    drive_transactions();          
+                    drive_transactions();   
+                           
                     disable fork ;
                 end
             join
@@ -45,6 +46,8 @@ class apb_driver extends uvm_driver #(.REQ(apb_item_drive)) implements apb_reset
                 process_drive_transactions = process::self() ;
 
                 forever begin
+                    apb_item_drive      apb_d_item ;
+
                     seq_item_port.get_next_item(apb_d_item);
                     drive_transaction(apb_d_item);
                     seq_item_port.item_done();

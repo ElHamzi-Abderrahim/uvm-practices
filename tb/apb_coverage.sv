@@ -293,7 +293,6 @@ class apb_coverage extends uvm_component ;
                     `uvm_error("ALGORITHM ISSUE", $sformatf("Current version of the code does not support item.dir: %0s", item.dir.name()))
 
             endcase
-
         end
 
 `endif // `ifdef COVERAGE_SUPPORTED

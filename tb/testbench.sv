@@ -15,7 +15,7 @@
 `include "design.sv"
 `include "algn_test_pkg.sv"
 
-`timescale 1ns/10ps
+`timescale 1ns/1ps
 
 
 
