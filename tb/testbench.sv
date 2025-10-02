@@ -25,47 +25,34 @@ module testbench();
   	import algn_test_pkg::* ;
   
   	/* Local Parameters: */
-  	localparam 	TB_ALGN_DATA_WIDTH 		= 32,
-  				TB_FIFO_DEPTH      		= 8 ,
-  				TB_APB_ADDR_WIDTH  		= 16,
-  				TB_APB_DATA_WIDTH   	= 32,
-   				TB_ALGN_OFFSET_WIDTH 	= TB_ALGN_DATA_WIDTH <= 8 ? 1 : $clog2(TB_ALGN_DATA_WIDTH/8),
-  				TB_ALGN_SIZE_WIDTH   	= $clog2(TB_ALGN_DATA_WIDTH/8)+1;
+  	localparam 	TB_FIFO_DEPTH = 8;
   
   	/* Signals Declaration: */
     
   	// Clock and Reset:
   	reg tb_clk ;
   	reg tb_resetn;
-  
-  	// RX interface:
-	reg 							tb_md_rx_valid;
-  	reg [TB_ALGN_DATA_WIDTH-1:0]	tb_md_rx_data;
-  	reg [TB_ALGN_OFFSET_WIDTH-1:0]	tb_md_rx_offset;
-  	reg [TB_ALGN_SIZE_WIDTH-1:0]	tb_md_rx_size;
-	reg 							tb_md_rx_ready;
-	reg 							tb_md_rx_err;
-  
-  	// TX interface:
-	reg 							tb_md_tx_valid;
-	reg [TB_ALGN_DATA_WIDTH-1:0]	tb_md_tx_data;
-	reg [TB_ALGN_OFFSET_WIDTH-1:0]	tb_md_tx_offset;
-	reg [TB_ALGN_SIZE_WIDTH-1:0]	tb_md_tx_size;
-	reg 							tb_md_tx_ready;
-	reg 							tb_md_tx_err;
-  	
+    	
     // Interrupt interface:
 	reg tb_irq;
   
   
   	/* Instance of APB interface: */
   	apb_if apb_if_inst (.pclk(tb_clk));	 // It's a system-verilog static element, so we need to instantiate it tb not inside the agent.
-  
+	
+	/* Instance of MD RX interface: */
+	md_if#(`ALIGN_TEST_DATA_WIDTH) md_rx_if(.clk(clk)) ;
   	
-    /* DUT (Data Aligner) Instanciation: */
-  
+	/* Instance of MD RX interface: */
+	md_if#(`ALIGN_TEST_DATA_WIDTH) md_tx_if(.clk(clk)) ;
+
+	/* Connecting reset signals */
+  	assign md_rx_if.reset_n = apb_if_inst.presetn ;
+  	assign md_tx_if.reset_n = apb_if_inst.presetn ;
+
+    /* DUT (Data Aligner) Instantiation: */
     cfs_aligner 
-  		#(.ALGN_DATA_WIDTH	(TB_ALGN_DATA_WIDTH),
+  		#(.ALGN_DATA_WIDTH	(`ALIGN_TEST_DATA_WIDTH),
           .FIFO_DEPTH		(TB_FIFO_DEPTH) 
          )
   	dut(
@@ -79,22 +66,24 @@ module testbench();
       	.pready			(apb_if_inst.pready),
       	.prdata			(apb_if_inst.prdata),
       	.pslverr		(apb_if_inst.pslverr),
-        .md_rx_valid	(tb_md_rx_valid),
-        .md_rx_data		(tb_md_rx_data),
-        .md_rx_offset	(tb_md_rx_offset),
-        .md_rx_size		(tb_md_rx_size),
-        .md_rx_ready	(tb_md_rx_ready),
-        .md_rx_err		(tb_md_rx_err),
-        .md_tx_valid	(tb_md_tx_valid),
-        .md_tx_data		(tb_md_tx_data),
-        .md_tx_offset	(tb_md_tx_offset),
-        .md_tx_size		(tb_md_tx_size),
-        .md_tx_ready	(tb_md_tx_ready),
-        .md_tx_err		(tb_md_tx_err),
+
+        .md_rx_valid	(md_rx_if.valid),
+        .md_rx_data		(md_rx_if.data),
+        .md_rx_offset	(md_rx_if.offset),
+        .md_rx_size		(md_rx_if.size),
+        .md_rx_ready	(md_rx_if.ready),
+        .md_rx_err		(md_rx_if.err),
+		
+        .md_tx_valid	(md_tx_if.valid),
+        .md_tx_data		(md_tx_if.data),
+        .md_tx_offset	(md_tx_if.offset),
+        .md_tx_size		(md_tx_if.size),
+        .md_tx_ready	(md_tx_if.ready),
+        .md_tx_err		(md_tx_if.err),
         .irq			(tb_irq)
     );
-  
-  
+
+
   
     /* Clock generator: */
     initial tb_clk = 0 ;
@@ -129,7 +118,12 @@ module testbench();
 										+ Case-2: If get is called in Run   Phase -> the returned value will be the putted in the db by the last putted one in db (e.g base_test -> 64).
 										[Ref. UVM-CRM/page-199].
 		*/				
-		uvm_config_db#(virtual interface apb_if)::set(null, "uvm_test_top.env.apb_agent_h", "vif", apb_if_inst); // Store in DB a pointer to the APB interface (virtual interface).
+		uvm_config_db#(virtual apb_if)::set(null, "uvm_test_top.env.apb_agent_h", "vif", apb_if_inst); // Store in DB a pointer to the APB interface (virtual interface).
+		
+		uvm_config_db#(virtual md_if#(`ALIGN_TEST_DATA_WIDTH))::set(null, "uvm_test_top.env.md_rx_agent_h", "vif", md_rx_if); 
+
+		uvm_config_db#(virtual md_if#(`ALIGN_TEST_DATA_WIDTH))::set(null, "uvm_test_top.env.md_tx_agent_h", "vif", md_tx_if); 
+
 		
 		run_test("");	// Test name will be passed using simulator arguments passing.
 

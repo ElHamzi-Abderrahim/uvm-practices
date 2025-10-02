@@ -9,6 +9,7 @@
         import algn_pkg::*;
         import apb_pkg::* ;
 
+        `include "algn_test_defines.sv"
 		`include "algn_test_base.sv"
         `include "algn_test_reg_access.sv"
     endpackage
