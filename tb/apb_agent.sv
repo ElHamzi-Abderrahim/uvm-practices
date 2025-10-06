@@ -27,7 +27,9 @@ class apb_agent extends uvm_agent implements apb_reset_handler;
 	
 	virtual function void build_phase(uvm_phase phase);
 		super.build_phase(phase);
-		agent_config = apb_agent_config::type_id::create("agent_config", this);
+
+		agent_config    = apb_agent_config::type_id::create("agent_config", this);
+		
 		apb_monitor_h   = apb_monitor::type_id::create("apb_monitor_h", this);
 
 		if(agent_config.active_passive == UVM_ACTIVE) begin
@@ -38,7 +40,6 @@ class apb_agent extends uvm_agent implements apb_reset_handler;
 		if(agent_config.get_has_coverage() == 1) begin
 			apb_coverage_h  = apb_coverage::type_id::create("apb_coverage_h", this); 
 		end
-
 	endfunction : build_phase
 	
 		
@@ -77,7 +78,6 @@ class apb_agent extends uvm_agent implements apb_reset_handler;
 			apb_coverage_h.agent_config = agent_config ;
 
 		end
-
 	endfunction : connect_phase
 
 

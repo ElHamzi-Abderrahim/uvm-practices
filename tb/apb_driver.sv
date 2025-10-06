@@ -59,6 +59,7 @@ class apb_driver extends uvm_driver #(.REQ(apb_item_drive)) implements apb_reset
 
     protected virtual task drive_transaction(input apb_item_drive item);
         apb_vif vif = agent_config.get_vif() ;
+
         $display("[DEBUG] %0s ", $sformatf("Driving \"%0s\" item: %0s", item.get_full_name(),item.convert2string()));
 
         // Wait for a pre-drive delay

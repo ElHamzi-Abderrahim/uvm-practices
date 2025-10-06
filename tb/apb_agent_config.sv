@@ -74,7 +74,7 @@ class apb_agent_config extends uvm_component;
 	// Setter for stuck_threshold field
 	virtual function void set_stuck_threshold(int unsigned value);
 		if(value <= 2) begin
-			`uvm_error("ALGORITHM ISSUE", $sformatf("Tried to set stuck_threshold to calue %0d but the minimum length of an APB tranfer is 2", value))
+			`uvm_error("ALGORITHM ISSUE", $sformatf("Tried to set stuck_threshold to value %0d but the minimum length of an APB tranfer is 2", value))
 		end
 		stuck_threshold = value ;
 	endfunction : set_stuck_threshold
@@ -109,7 +109,7 @@ class apb_agent_config extends uvm_component;
 	endfunction : start_of_simulation_phase
       
 
-	virtual task run_phase (uvm_phase phase);
+	virtual task run_phase(uvm_phase phase);
 		forever begin
 			// If the has_checks field has changed
 			@(vif.has_checks) ; 
@@ -118,7 +118,6 @@ class apb_agent_config extends uvm_component;
 			if(vif.has_checks != get_has_checks()) begin
 				`uvm_error("ALGORITHM ISSUE", $sformatf("Can not change \'has_checks\' from APB interface directly - use %0s.set_has_checks()", get_full_name() ) )
 			end
-
 		end
 	endtask
 
