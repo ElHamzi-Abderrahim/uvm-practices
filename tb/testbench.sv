@@ -120,9 +120,9 @@ module testbench();
 		*/				
 		uvm_config_db#(virtual apb_if)::set(null, "uvm_test_top.env.apb_agent_h", "vif", apb_if_inst); // Store in DB a pointer to the APB interface (virtual interface).
 		
-		uvm_config_db#(virtual md_if#(`ALIGN_TEST_DATA_WIDTH))::set(null, "uvm_test_top.env.md_rx_agent_h", "vif", md_rx_if); 
+		uvm_config_db#(virtual md_if#(`ALIGN_TEST_DATA_WIDTH))::set(null, "uvm_test_top.env.md_agent_rx", "vif", md_rx_if); 
 
-		uvm_config_db#(virtual md_if#(`ALIGN_TEST_DATA_WIDTH))::set(null, "uvm_test_top.env.md_tx_agent_h", "vif", md_tx_if); 
+		uvm_config_db#(virtual md_if#(`ALIGN_TEST_DATA_WIDTH))::set(null, "uvm_test_top.env.md_agent_tx", "vif", md_tx_if); 
 
 		
 		run_test("");	// Test name will be passed using simulator arguments passing.

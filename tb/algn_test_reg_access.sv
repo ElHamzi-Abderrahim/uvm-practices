@@ -35,7 +35,7 @@ class algn_test_reg_access extends algn_test_base;
 			end
 
 			begin
-				apb_sequence_simple apb_sedq_simple = apb_sequence_simple::type_id::create("apb_seq_simple") ;
+				apb_sequence_simple apb_seq_simple = apb_sequence_simple::type_id::create("apb_seq_simple") ;
 
 				`ifndef RANDOMIZATION_SUPPORTED
 				apb_seq_simple.randomize_user() ;
