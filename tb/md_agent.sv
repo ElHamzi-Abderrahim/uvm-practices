@@ -1,14 +1,21 @@
 `ifndef MD_AGENT_SV
 `define MD_AGENT_SV
 
-class md_agent#(int unsigned DATA_WIDTH = 32) extends uvm_component implements md_reset_handler ;
+class md_agent#(int unsigned DATA_WIDTH = 32, type ITEM_DRIVE = md_item_drv) extends uvm_component implements md_reset_handler ;
     
-    `uvm_component_param_utils(md_agent#(DATA_WIDTH))
+    `uvm_component_param_utils(md_agent#(DATA_WIDTH, ITEM_DRIVE))
 
     typedef virtual md_if#(DATA_WIDTH) md_vif ; // defined here because it's dependent on the DATA_WIDTH
 
-
+	// Agent config handler
     md_agent_config#(DATA_WIDTH) agent_config ;
+
+	// MD driver handler
+	md_driver#(ITEM_DRIVE) driver ;
+
+	// Sequencer handler
+	md_sequencer#(ITEM_DRIVE) sequencer ;
+
 
     function new(string name="", uvm_component parent) ;
         super.new(name, parent) ;
@@ -18,6 +25,12 @@ class md_agent#(int unsigned DATA_WIDTH = 32) extends uvm_component implements m
     virtual function void build_phase(uvm_phase phase);
 		super.build_phase(phase);
 		agent_config = md_agent_config#(DATA_WIDTH)::type_id::create("agent_config", this);
+
+		if(agent_config.get_active_passive() == UVM_ACTIVE) begin
+			sequencer = md_sequencer#(ITEM_DRIVE)::type_id::create("sequencer", this) ;
+			driver    = md_driver#(ITEM_DRIVE)::type_id::create("driver", this) ;
+		end
+
 	endfunction : build_phase
 	
 		
@@ -31,6 +44,12 @@ class md_agent#(int unsigned DATA_WIDTH = 32) extends uvm_component implements m
 		else begin  // if the virtual interface is retrieved succufully (get methode returned '1' ) from db -> vif.
 			agent_config.set_vif(vif);
 		end
+
+		if(agent_config.get_active_passive() == UVM_ACTIVE) begin
+			driver.seq_item_port.connect(sequencer.seq_item_export) ;
+			driver.agent_config = agent_config ;
+		end
+	
 	endfunction : connect_phase
 
 

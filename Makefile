@@ -54,7 +54,7 @@ simulate: clean compile
 	@echo "Running Simulation..."
 	vsim 	testbench \
 			$(VSIM_MODE) \
-			+UVM_TESTNAME=algn_test_reg_access \
+			+UVM_TESTNAME=algn_test_random \
 			+UVM_MAX_QUIT_COUNT=1 \
 			-do "set gui_mode $(GUI); \
 			add wave -position insertpoint  \

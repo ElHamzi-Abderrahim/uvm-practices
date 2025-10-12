@@ -15,7 +15,7 @@ class algn_env#(int unsigned MD_DATA_WIDTH = 32) extends uvm_env;
     md_agent_slave#(MD_DATA_WIDTH) md_agent_tx ;
 
 
-    function new(string name="algn_env", uvm_component parent=null);
+    function new(string name="", uvm_component parent=null);
         super.new(name, parent);
     endfunction
   

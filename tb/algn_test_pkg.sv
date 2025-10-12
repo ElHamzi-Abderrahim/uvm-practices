@@ -8,10 +8,13 @@
         import uvm_pkg::* ;
         import algn_pkg::*;
         import apb_pkg::* ;
+        import md_pkg::*  ;
 
         `include "algn_test_defines.sv"
 		`include "algn_test_base.sv"
         `include "algn_test_reg_access.sv"
+        `include "algn_test_random.sv"
+
     endpackage
 
 `endif // `ifndef ALGN_TEST_PKG_SV
