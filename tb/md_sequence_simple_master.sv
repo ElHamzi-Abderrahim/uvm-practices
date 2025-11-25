@@ -25,12 +25,12 @@ class md_sequence_simple_master extends md_sequence_base#(md_item_drv_master) ;
         virtual function void randomize_user();
             item.randomize_user() ;
 
-            size_d  = $urandom_range(1 , p_sequencer.get_data_width() / 8 ) ;
-            $display("SEQ SIMPLE: Randomized data size : %0d", size_d) ;
+            size_d  = $urandom_range(1 , (p_sequencer.get_data_width())/8 ) ;
+            $display("[DEBUG] SEQUENCE_SIMPLE_MASTER: Randomized data size : %0d", size_d) ;
 
             item.offset = $urandom_range(0 , ((p_sequencer.get_data_width()/8)-size_d )) ; 
             // <=> item.data.size() + item.offset() <= p_sequencer.get_data_width() / 8 ;
-            $display("SEQ SIMPLE: Randomized offset : %0d", item.offset) ;
+            $display("[DEBUG] SEQUENCE_SIMPLE_MASTER: Randomized offset : %0d", item.offset) ;
             
             item.data = {} ;
             for(i =0; i<size_d; i++) begin
@@ -38,7 +38,7 @@ class md_sequence_simple_master extends md_sequence_base#(md_item_drv_master) ;
                 item.data.push_front(data_rnd) ;
             end // for
 
-            $display("SEQ SIMPLE: Randomized data    : %p", item.data) ;
+            $display("[DEBUG] SEQUENCE_SIMPLE_MASTER: Randomized data    : %p", item.data) ;
         endfunction : randomize_user
     `endif // `ifndef RANDOMIZATION_SUPPORTED
 
@@ -56,7 +56,7 @@ class md_sequence_simple_master extends md_sequence_base#(md_item_drv_master) ;
     endfunction : new
 
     virtual task body() ;
-        $display("At start of body() of the sequence_simple_master \n") ;
+        $display("[DEBUG] MD_SEQUENCE_SIMPLE_MASTER: START of body() of the sequence_simple_master \n") ;
 
         `ifdef RANDOMIZATION_SUPPORTED
         start_item(item);
@@ -67,7 +67,7 @@ class md_sequence_simple_master extends md_sequence_base#(md_item_drv_master) ;
         `uvm_send(item)
         `endif // `ifndef RANDOMIZATION_SUPPORTED 
 
-        $display("At the end of the body() of the sequence_simple_master \n") ;
+        $display("[DEBUG] MD_SEQUENCE_SIMPLE_MASTER: END of the body() of the sequence_simple_master \n") ;
 
     endtask : body
 

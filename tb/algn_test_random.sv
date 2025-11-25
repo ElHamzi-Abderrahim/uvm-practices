@@ -17,21 +17,21 @@ class algn_test_random extends algn_test_base;
 		
 		repeat(4) begin
 			md_sequence_simple_master seq_simple = md_sequence_simple_master::type_id::create("seq_simple") ;
-    
-            seq_simple.set_sequencer(env.md_agent_rx.sequencer) ;
+      seq_simple.set_sequencer(env.md_agent_rx.sequencer) ;
 
-			$display("Trying to randomize the item... \n") ;
+			$display("[DEBUG] ALGN_TEST_RANDOM: Trying to randomize the sequence... \n") ;
 
-            `ifndef RANDOMIZATION_SUPPORTED
+    	`ifndef RANDOMIZATION_SUPPORTED
 			seq_simple.randomize_user();
 			`endif // `ifndef RANDOMIZATION_SUPPORTED    
-            
-            `ifdef RANDOMIZATION_SUPPORTED
-            void'(seq_simple.randomize()) ;
-            `endif // `ifdef RANDOMIZATION_SUPPORTED
+			
+			`ifdef RANDOMIZATION_SUPPORTED
+			void'(seq_simple.randomize()) ;
+			`endif // `ifdef RANDOMIZATION_SUPPORTED
 
-			$display("After randomizing the item... \n") ;
+			$display("[DEBUG] ALGN_TEST_RANDOM: After randomizing the sequence... \n") ;
 			seq_simple.start(env.md_agent_rx.sequencer) ;
+			$display("[DEBUG] ALGN_TEST_RANDOM: After starting the sequence... \n") ;
 		end 
 
 		#(100ns) ;

@@ -11,7 +11,6 @@ However, the final version of the verification environement is in the image `doc
 ![verif_env_achievement](doc/Env-Verif-Arch-Achievement.jpg)
 
 ### Notes:
-- 
 - The developed APB agent is not supporting the verification of the full version of the APB protocol.
 
 ### Disclaimer:

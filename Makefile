@@ -50,6 +50,8 @@ compile: clean
 			+incdir+$(RTL_DIR) \
 			+incdir+$(TB_DIR)
 
+# +UVM_VERBOSITY=UVM_FULL 
+
 simulate: clean compile
 	@echo "Running Simulation..."
 	vsim 	testbench \

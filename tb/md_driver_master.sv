@@ -23,7 +23,7 @@ class md_driver_master#(int unsigned DATA_WIDTH = 32) extends md_driver#(.ITEM_D
         super.run_phase(phase) ;
     endtask : run_phase
 
-    // Empty taskt to be overrided in md_driver_slave and md_driver_master
+
     virtual task drive_transaction(input ITEM_DRIVE item);
         md_vif vif = agent_config.get_vif() ;
 

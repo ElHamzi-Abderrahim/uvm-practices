@@ -12,9 +12,8 @@ class md_sequencer#(type ITEM_DRIVE = md_item_drv) extends uvm_sequencer#(.REQ(I
     
     virtual function void handle_reset(uvm_phase phase) ;
         int objections_count ;
-
+        $display("[DEBUG] SEQUENCER: begin handle_reset().");
         stop_sequences() ;
-
         objections_count = uvm_test_done.get_objection_count(this) ;
 
         if(objections_count > 0 ) begin
@@ -22,10 +21,11 @@ class md_sequencer#(type ITEM_DRIVE = md_item_drv) extends uvm_sequencer#(.REQ(I
         end
 
         start_phase_sequence(phase) ;
+        $display("[DEBUG] SEQUENCER: end handle_reset().");
     endfunction : handle_reset
 
     virtual function int unsigned get_data_width();
-        // In case forgetting to be implemented in the child class, show fatal error.
+        // In case forgetting to be implemented in the child class, show fatal error, otherwise if it's implemented in the child this method will be overrided.
         `uvm_fatal("ALGORITHM_ISSUE", "Implement get_data_width()"); 
     endfunction : get_data_width
 

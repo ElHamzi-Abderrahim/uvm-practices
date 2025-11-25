@@ -5,9 +5,9 @@ class md_agent_config#(int unsigned DATA_WIDTH = 32) extends uvm_component ;
     
 	`uvm_component_param_utils(md_agent_config#(DATA_WIDTH))
     
-    typedef virtual md_if#(DATA_WIDTH) md_vif ; // defined here because it's dependent on the DATA_WIDTH
+  typedef virtual md_if#(DATA_WIDTH) md_vif ; // defined here because it's dependent on the DATA_WIDTH
 
-    // Virtual Interface
+  // Virtual Interface
 	local md_vif vif ;
 	
 	// Active/Passive control
@@ -22,7 +22,6 @@ class md_agent_config#(int unsigned DATA_WIDTH = 32) extends uvm_component ;
 
 	function new (string name="", uvm_component parent);
 		super.new(name, parent) ;
-
 		active_passive  = UVM_ACTIVE ;
 		has_checks      = 1 ;
 		has_coverage    = 1 ;
@@ -50,7 +49,7 @@ class md_agent_config#(int unsigned DATA_WIDTH = 32) extends uvm_component ;
 			`uvm_fatal("ALGORITHM ISSUE", "Trying to set the virtual interface more than once.")
 		end
 	endfunction : set_vif
-	
+
 	// Getter for the MD virtual interface:
 	virtual function md_vif get_vif();
 		return vif;
@@ -71,7 +70,6 @@ class md_agent_config#(int unsigned DATA_WIDTH = 32) extends uvm_component ;
 	// Setter for has_checks field
 	virtual function void set_has_checks(bit value);
 		has_checks = value ;
-
 		if(vif != null) begin
 			vif.has_checks = has_checks ;
 		end
@@ -107,9 +105,6 @@ class md_agent_config#(int unsigned DATA_WIDTH = 32) extends uvm_component ;
 			@(posedge vif.clk) ; // de-asserting the reset is Synchronous
 		end
 	endtask: wait_reset_end                      
-
-
-
 
 endclass : md_agent_config
 

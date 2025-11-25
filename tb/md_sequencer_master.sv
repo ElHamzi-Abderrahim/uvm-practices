@@ -10,7 +10,7 @@ class md_sequencer_master#(int unsigned DATA_WIDTH=32) extends md_sequencer#(.IT
     endfunction : new
 
     virtual function int unsigned get_data_width();
-        return DATA_WIDTH ;   
+        return DATA_WIDTH ;
     endfunction : get_data_width
 
 endclass

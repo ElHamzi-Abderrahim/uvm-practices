@@ -46,9 +46,9 @@ class md_driver#(type ITEM_DRIVE = md_item_drv) extends uvm_driver#(.REQ(ITEM_DR
                 process_drive_transactions = process::self() ;
                 forever begin
                     ITEM_DRIVE  md_d_item ;
-                    $display("Waiting to get the next item... \n");
+                    $display("[DEBUG] DRIVER: Waiting to get the next item... \n");
                     seq_item_port.get_next_item(md_d_item);
-                    $display("Driver got the next item... \n");
+                    $display("[DEBUG] DRIVER: Driver got the next item... \n");
                     drive_transaction(md_d_item);
                     seq_item_port.item_done();
                 end 
@@ -67,11 +67,8 @@ class md_driver#(type ITEM_DRIVE = md_item_drv) extends uvm_driver#(.REQ(ITEM_DR
     virtual function void handle_reset(uvm_phase phase) ; 
         if(process_drive_transactions != null) begin
             process_drive_transactions.kill() ; 
-
             process_drive_transactions = null ;
         end
-
-
     endfunction : handle_reset
 
 
