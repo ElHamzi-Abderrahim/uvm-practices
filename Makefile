@@ -5,12 +5,14 @@ info:
 	@echo "compile  : compile the project."
 	@echo "simulate : simulate the project using ModelSim."
 	@echo "           GUI=<1|0> 1: with GUI, 0: without GUI."
+	@echo "           TEST_NAME =<test_name>
+	@echo "           UVM_HOME  = path/to/uvm_library
 	@echo "clean    : clean work directory."
 
 
 # UVM Related variables:
-UVM_HOME	= $(HOME)/uvm-1.2
-UVM_SRC		= $(HOME)/uvm-1.2/src
+UVM_HOME	?= $(HOME)/uvm-1.2
+UVM_SRC		= $(UVM_HOME)/src
 UVM_PKG		= $(UVM_SRC)/uvm_pkg.sv
 DPI_SRC 	= $(UVM_HOME)/src/dpi/uvm_dpi.cc
 
@@ -21,8 +23,12 @@ SIM_DIR 	= sim
 WORK_DIR	= work
 
 # Design files:
-RTL_TOP 	= $(RTL_DIR)/design.sv
-TB_TOP	 	= $(TB_DIR)/testbench.sv
+RTL_TOP 	?= $(RTL_DIR)/design.sv
+TB_TOP	 	?= $(TB_DIR)/testbench.sv
+
+# Test to be launched:
+TEST_NAME   ?= algn_test_random 
+
 
 # Simulation mode is defaulted without graphical user interface:
 GUI ?= 0 
@@ -56,7 +62,7 @@ simulate: clean compile
 	@echo "Running Simulation..."
 	vsim 	testbench \
 			$(VSIM_MODE) \
-			+UVM_TESTNAME=algn_test_random \
+			+UVM_TESTNAME=$(TEST_NAME) \
 			+UVM_MAX_QUIT_COUNT=1 \
 			-do "set gui_mode $(GUI); \
 			add wave -position insertpoint  \
