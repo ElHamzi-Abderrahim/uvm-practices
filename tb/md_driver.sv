@@ -62,12 +62,12 @@ class md_driver#(type ITEM_DRIVE = md_item_drv) extends uvm_driver#(.REQ(ITEM_DR
 
     // Funtion to handle reset:
     virtual function void handle_reset(uvm_phase phase) ; 
-        $display("[DEBUG] DRIVER: begin handle_reset().");
+        // $display("[DEBUG] DRIVER: begin handle_reset().");
         if(process_drive_transactions != null) begin
             process_drive_transactions.kill() ; 
             process_drive_transactions = null ;
         end
-        $display("[DEBUG] DRIVER: end handle_reset().");        
+        // $display("[DEBUG] DRIVER: end handle_reset().");        
     endfunction : handle_reset
 
 

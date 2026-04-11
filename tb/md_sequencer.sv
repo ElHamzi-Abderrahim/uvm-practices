@@ -12,7 +12,7 @@ class md_sequencer#(type ITEM_DRIVE = md_item_drv) extends uvm_sequencer#(.REQ(I
     
     virtual function void handle_reset(uvm_phase phase) ;
         int objections_count ;
-        $display("%0t :[DEBUG] SEQUENCER: begin handle_reset().", $time);
+        // $display("%0t :[DEBUG] SEQUENCER: begin handle_reset().", $time);
         stop_sequences() ;
         objections_count = uvm_test_done.get_objection_count(this) ;
 
@@ -21,7 +21,7 @@ class md_sequencer#(type ITEM_DRIVE = md_item_drv) extends uvm_sequencer#(.REQ(I
         end
 
         start_phase_sequence(phase) ;
-        $display("%0t :[DEBUG] SEQUENCER: end handle_reset().", $time);
+        // $display("%0t :[DEBUG] SEQUENCER: end handle_reset().", $time);
     endfunction : handle_reset
 
     virtual function int unsigned get_data_width();

@@ -65,8 +65,8 @@ class md_item_drv_master extends md_item_drv;
         // Randomize the size of data to mimic "data.size >= 1 ;"
         size_d  = $urandom_range(1, 20) ;
         
-        $display("[DEBUG] ITEM DRIVE: Randomized data size : %0d", size_d) ;
-        $display("[DEBUG] ITEM DRIVE: Randomized offset    : %0d", offset) ;
+        // $display("[DEBUG] ITEM DRIVE: Randomized data size : %0d", size_d) ;
+        // $display("[DEBUG] ITEM DRIVE: Randomized offset    : %0d", offset) ;
 
         // Randomize each byte of the data queue
         for(i =0; i<size_d; i++) begin
@@ -74,7 +74,7 @@ class md_item_drv_master extends md_item_drv;
             data.push_front(data_rnd) ;
         end // for
         
-        $display("ITEM DRIVE: Randomized data    : %p", data) ;
+        // $display("ITEM DRIVE: Randomized data    : %p", data) ;
 
     endfunction : randomize_user
     

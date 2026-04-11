@@ -45,7 +45,7 @@ class md_agent#(int unsigned DATA_WIDTH = 32, type ITEM_DRIVE = md_item_drv) ext
 		end
 		// Connect Sequencer <-> Driver
 		if(agent_config.get_active_passive() == UVM_ACTIVE) begin
-			$display("[DEBUG] Connecting the driver (%0s) and the sequencer(%0s)", driver.get_full_name(), sequencer.get_full_name());
+			// $display("[DEBUG] Connecting the driver (%0s) and the sequencer(%0s)", driver.get_full_name(), sequencer.get_full_name());
 			driver.seq_item_port.connect(sequencer.seq_item_export) ;
 			driver.agent_config = agent_config ;
 		end
