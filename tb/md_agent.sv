@@ -3,7 +3,6 @@
 
 class md_agent#(int unsigned DATA_WIDTH = 32, type ITEM_DRIVE = md_item_drv) extends uvm_component implements md_reset_handler ;
     
-	`uvm_component_param_utils(md_agent#(DATA_WIDTH, ITEM_DRIVE))
 
 	typedef virtual md_if#(DATA_WIDTH) md_vif ; // defined here because it's dependent on the DATA_WIDTH
 
@@ -16,6 +15,7 @@ class md_agent#(int unsigned DATA_WIDTH = 32, type ITEM_DRIVE = md_item_drv) ext
 	// Sequencer handler
 	md_sequencer#(ITEM_DRIVE) sequencer ;
 
+	`uvm_component_param_utils(md_agent#(DATA_WIDTH, ITEM_DRIVE))
 
 	function new(string name="", uvm_component parent) ;
 		super.new(name, parent) ;
@@ -63,6 +63,7 @@ class md_agent#(int unsigned DATA_WIDTH = 32, type ITEM_DRIVE = md_item_drv) ext
 			// Call handle reset of each child that implements the md_reset_handler interface.
 			if($cast(reset_handler, children[idx])) begin
 				reset_handler.handle_reset(phase) ;
+				$display("%0t :[DEBUG] MD_AGENT: Reset is handled for the child: %0s",$time ,children[idx].get_full_name());
 			end 
 		end
 	endfunction : handle_reset

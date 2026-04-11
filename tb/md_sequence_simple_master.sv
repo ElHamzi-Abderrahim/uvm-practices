@@ -11,7 +11,7 @@ class md_sequence_simple_master extends md_sequence_base#(md_item_drv_master) ;
         constraint item_hard {
             item.data.size() > 0 ;
             item.data.size() <= p_sequencer.get_data_width() / 8;
-            item.data.size() + item.offset() <= p_sequencer.get_data_width() / 8 ;
+            item.data.size() + item.offset <= p_sequencer.get_data_width() / 8 ;
         }
     `endif // `ifdef RANDOMIZATION_SUPPORTED
     
@@ -26,11 +26,11 @@ class md_sequence_simple_master extends md_sequence_base#(md_item_drv_master) ;
             item.randomize_user() ;
 
             size_d  = $urandom_range(1 , (p_sequencer.get_data_width())/8 ) ;
-            $display("[DEBUG] SEQUENCE_SIMPLE_MASTER: Randomized data size : %0d", size_d) ;
+            $display("[DEBUG] MD_SEQUENCE_SIMPLE_MASTER: Randomized data size : %0d", size_d) ;
 
             item.offset = $urandom_range(0 , ((p_sequencer.get_data_width()/8)-size_d )) ; 
             // <=> item.data.size() + item.offset() <= p_sequencer.get_data_width() / 8 ;
-            $display("[DEBUG] SEQUENCE_SIMPLE_MASTER: Randomized offset : %0d", item.offset) ;
+            $display("[DEBUG] MD_SEQUENCE_SIMPLE_MASTER: Randomized offset : %0d", item.offset) ;
             
             item.data = {} ;
             for(i =0; i<size_d; i++) begin
@@ -38,7 +38,7 @@ class md_sequence_simple_master extends md_sequence_base#(md_item_drv_master) ;
                 item.data.push_front(data_rnd) ;
             end // for
 
-            $display("[DEBUG] SEQUENCE_SIMPLE_MASTER: Randomized data    : %p", item.data) ;
+            $display("[DEBUG] MD_SEQUENCE_SIMPLE_MASTER: Randomized data    : %p", item.data) ;
         endfunction : randomize_user
     `endif // `ifndef RANDOMIZATION_SUPPORTED
 
@@ -56,7 +56,7 @@ class md_sequence_simple_master extends md_sequence_base#(md_item_drv_master) ;
     endfunction : new
 
     virtual task body() ;
-        $display("[DEBUG] MD_SEQUENCE_SIMPLE_MASTER: START of body() of the sequence_simple_master \n") ;
+        $display("%0t :[DEBUG] MD_SEQUENCE_SIMPLE_MASTER: START of body() of the sequence_simple_master \n", $time) ;
 
         `ifdef RANDOMIZATION_SUPPORTED
         start_item(item);
@@ -67,7 +67,7 @@ class md_sequence_simple_master extends md_sequence_base#(md_item_drv_master) ;
         `uvm_send(item)
         `endif // `ifndef RANDOMIZATION_SUPPORTED 
 
-        $display("[DEBUG] MD_SEQUENCE_SIMPLE_MASTER: END of the body() of the sequence_simple_master \n") ;
+        $display("%0t :[DEBUG] MD_SEQUENCE_SIMPLE_MASTER: END of the body() of the sequence_simple_master \n", $time) ;
 
     endtask : body
 

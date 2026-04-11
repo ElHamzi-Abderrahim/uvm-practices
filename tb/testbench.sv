@@ -34,7 +34,7 @@ module testbench();
   	reg tb_resetn;
     	
     // Interrupt interface:
-	reg tb_irq;
+		reg tb_irq;
   
   
   	/* Instance of APB interface: */
@@ -93,7 +93,7 @@ module testbench();
     /* Reset generator: */
     initial begin
         apb_if_inst.presetn = 1;
-      	#3ns ;
+      	#4ns ;
         apb_if_inst.presetn = 0;
       	#30ns ;
         apb_if_inst.presetn = 1;

@@ -14,25 +14,15 @@ class md_driver_master#(int unsigned DATA_WIDTH = 32) extends md_driver#(.ITEM_D
     endfunction : new
 
 
-    function void build_phase (uvm_phase phase); 
-        super.build_phase(phase);
-    endfunction:build_phase
-
-
-    virtual task run_phase(uvm_phase phase);
-        super.run_phase(phase) ;
-    endtask : run_phase
-
-
-    virtual task drive_transaction(input ITEM_DRIVE item);
+    virtual task drive_transaction(md_item_drv_master item);
         md_vif vif = agent_config.get_vif() ;
 
         int unsigned data_width_in_bytes = DATA_WIDTH / 8 ;
 
-        $display("[DEBUG] %0s ", $sformatf("Driving \"%0s\" item: %0s", item.get_full_name(),item.convert2string()));
+        $display("[DEBUG] MD_DRIVER_MASTER %0s ", $sformatf("Driving \"%0s\" item: %0s", item.get_full_name(),item.convert2string()));
 
         if(item.offset + item.data.size() > data_width_in_bytes ) begin
-            `uvm_fatal("ALGORITHM_ISSUE", $sformatf("Traying to drive an item with offset %0d and %0d bytes, but the width of the data bus, in bytes is %0d", 
+            `uvm_fatal("ALGORITHM_ISSUE", $sformatf("Trying to drive an item with offset %0d and %0d bytes, but the width of the data bus, in bytes is %0d", 
                         item.offset, item.data.size(), data_width_in_bytes ))
         end
 

@@ -3,7 +3,7 @@
 
 class algn_test_random extends algn_test_base;
   
-  	`uvm_component_utils(algn_test_random)
+  `uvm_component_utils(algn_test_random)
   
 	function new(string name = "", uvm_component parent);
 		super.new(name, parent);
