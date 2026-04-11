@@ -41,10 +41,10 @@ module testbench();
   	apb_if apb_if_inst (.pclk(tb_clk));	 // It's a system-verilog static element, so we need to instantiate it tb not inside the agent.
 	
 	/* Instance of MD RX interface: */
-	md_if#(`ALIGN_TEST_DATA_WIDTH) md_rx_if(.clk(clk)) ;
+	md_if#(`ALIGN_TEST_DATA_WIDTH) md_rx_if(.clk(tb_clk)) ;
   	
 	/* Instance of MD RX interface: */
-	md_if#(`ALIGN_TEST_DATA_WIDTH) md_tx_if(.clk(clk)) ;
+	md_if#(`ALIGN_TEST_DATA_WIDTH) md_tx_if(.clk(tb_clk)) ;
 
 	/* Connecting reset signals */
   	assign md_rx_if.reset_n = apb_if_inst.presetn ;
