@@ -15,7 +15,7 @@ class algn_test_random extends algn_test_base;
 
 		#(100ns); 
 		
-		repeat(4) begin
+		repeat(5) begin
 			md_sequence_simple_master seq_simple = md_sequence_simple_master::type_id::create("seq_simple") ;
       seq_simple.set_sequencer(env.md_agent_rx.sequencer) ;
 

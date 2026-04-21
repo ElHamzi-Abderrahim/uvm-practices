@@ -76,6 +76,13 @@ simulate: clean compile
 				sim:/testbench/dut/pwdata \
 				sim:/testbench/dut/pready \
 				sim:/testbench/dut/pslverr ; \
+			add wave -position insertpoint  \
+				sim:/testbench/dut/md_rx_valid \
+				sim:/testbench/dut/md_rx_data \
+				sim:/testbench/dut/md_rx_offset \
+				sim:/testbench/dut/md_rx_size \
+				sim:/testbench/dut/md_rx_ready \
+				sim:/testbench/dut/md_rx_err; \
 			run -all;"
 
 clean: 

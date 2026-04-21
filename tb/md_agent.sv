@@ -15,6 +15,9 @@ class md_agent#(int unsigned DATA_WIDTH = 32, type ITEM_DRIVE = md_item_drv) ext
 	// Sequencer handler
 	md_sequencer#(ITEM_DRIVE) sequencer ;
 
+	// Monitor Handler
+	md_monitor#(DATA_WIDTH) monitor ;
+
 	`uvm_component_param_utils(md_agent#(DATA_WIDTH, ITEM_DRIVE))
 
 	function new(string name="", uvm_component parent) ;
@@ -25,6 +28,7 @@ class md_agent#(int unsigned DATA_WIDTH = 32, type ITEM_DRIVE = md_item_drv) ext
   virtual function void build_phase(uvm_phase phase);
 		super.build_phase(phase);
 		agent_config = md_agent_config#(DATA_WIDTH)::type_id::create("agent_config", this);
+		monitor      = md_monitor#(DATA_WIDTH)::type_id::create("monitor", this);
 		
 		if(agent_config.get_active_passive() == UVM_ACTIVE) begin
 			sequencer = md_sequencer#(ITEM_DRIVE)::type_id::create("sequencer", this) ;
@@ -43,6 +47,9 @@ class md_agent#(int unsigned DATA_WIDTH = 32, type ITEM_DRIVE = md_item_drv) ext
 		else begin  // if the virtual interface is retrieved succufully (get methode returned '1' ) from db -> vif.
 			agent_config.set_vif(vif);
 		end
+		
+		monitor.agent_config = agent_config ;
+
 		// Connect Sequencer <-> Driver
 		if(agent_config.get_active_passive() == UVM_ACTIVE) begin
 			// $display("[DEBUG] Connecting the driver (%0s) and the sequencer(%0s)", driver.get_full_name(), sequencer.get_full_name());

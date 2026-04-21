@@ -19,12 +19,16 @@ class md_agent_config#(int unsigned DATA_WIDTH = 32) extends uvm_component ;
 	// Switch to enable the coverage
 	local bit has_coverage ;
 
+	// Sample delay start transaction (the delay just right after valid signal is asserted)
+	local time sample_delay_start_tr ;
+
 
 	function new (string name="", uvm_component parent);
 		super.new(name, parent) ;
-		active_passive  = UVM_ACTIVE ;
-		has_checks      = 1 ;
-		has_coverage    = 1 ;
+		active_passive  			= UVM_ACTIVE ;
+		has_checks      			= 1 ;
+		has_coverage    			= 1 ;
+		sample_delay_start_tr = 1ns ;
 	endfunction : new
 
 	virtual task run_phase (uvm_phase phase);
@@ -79,6 +83,17 @@ class md_agent_config#(int unsigned DATA_WIDTH = 32) extends uvm_component ;
 	virtual function bit get_has_checks();
 		return has_checks ;
 	endfunction : get_has_checks
+
+
+	// Setter for sample_delay_start_tr field
+	virtual function void set_sample_delay_start_tr(time value);
+		sample_delay_start_tr = value ;
+	endfunction : set_sample_delay_start_tr
+
+	// Getter for sample_delay_start_tr field
+	virtual function time get_sample_delay_start_tr();
+		return sample_delay_start_tr ;
+	endfunction : get_sample_delay_start_tr
 
 
 	// Setter for has_coverage field
